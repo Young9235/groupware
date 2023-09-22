@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.softleaf.groupware.dao.BookMapper">
+
+	<select id="getBookListCnt" resultType="Integer">
+		SELECT COUNT(*) FROM tb_book_info
+	</select>
+	
+  	<select id="getBookList" resultType="com.softleaf.groupware.dto.Book">
+  		SELECT * FROM tb_book_info
+  		<!--  limit #{schPage}, #{schRowsPerPage}  -->
+  	</select>
+  
+	<insert id="insertBook" parameterType="Map">
+		INSERT INTO tb_book_info 
+		(
+			bookId, 	
+			productCode,
+			title, 		
+			author, 	
+			publicDate, 
+			description,
+			inStockYn, 	
+			inStockCnt, 
+			category, 	
+			price, 		
+			tagId 		
+		)
+		VALUES 
+		(
+			#{bookId}, 	
+			#{productCode},
+			#{title}, 		
+			#{author}, 	
+			#{publicDate}, 
+			#{description},
+			#{inStockYn}, 	
+			#{inStockCnt}, 
+			#{category}, 	
+			#{price}, 		
+			#{tagId}
+		)
+	</insert>
+	
+	<select id="getBookInfo" parameterType="Map" resultType="com.softleaf.groupware.dto.Book">
+  		SELECT * FROM tb_book_info where bookId = #{bookId}
+  	</select>
+  	
+  	<update id="updateBook" parameterType="Map">
+		UPDATE tb_book_info AS A
+		SET A.title = #{title},
+			A.description = #{description}, 
+			A.price = #{price}
+		WHERE
+			A.bookId = #{bookId}
+	</update>
+	
+	<delete id="deleteBook" parameterType="Map">
+		DELETE FROM tb_book_info AS A
+		WHERE
+			A.bookId = #{bookId}
+	</delete>
+	
+
+</mapper>

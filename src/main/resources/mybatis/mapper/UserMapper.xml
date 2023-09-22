@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.softleaf.groupware.dao.UserMapper">
+
+	<!-- 로그인시 필요 , 인증 시 처음 거치는 부분 -->
+	<select id="findByLoginId" resultType="com.softleaf.groupware.dto.UserDTO">
+		SELECT A.*, group_concat(B.auth_name) as roles
+		FROM user_info A
+	 	left outer join member_auth_info B on A.user_id = B.user_id
+		where A.login_id = #{loginId}
+		group by A.user_id
+	</select>
+
+	<!-- 리프레시 토큰 업데이트 -->
+	<update id="updateRefreshToken" parameterType="Map">
+		UPDATE user_info
+		SET refresh_token = #{refreshToken}
+		WHERE login_id = #{loginId}
+	</update>
+
+	<!-- 리프레시 토큰 조회 -->
+	<select id="getUserRenew" resultType="com.softleaf.groupware.dto.UserDTO">
+		SELECT A.*, group_concat(B.auth_name) as roles
+		FROM user_info A
+	 	left outer join member_auth_info B
+		on A.user_id = B.user_id
+		where A.refresh_token = #{refreshToken}
+		group by A.user_id
+	</select>
+
+	<select id="getLoginCheck" resultType="com.softleaf.groupware.dto.UserDTO">
+		SELECT 
+		    COUNT(*) as cnt,
+		    user_name,
+		    login_id,
+		    email,
+		    user_password,
+		    user_id
+		FROM
+		    user_info
+		WHERE
+		    login_id = #{loginId}
+		        AND user_password = #{userPassword}
+		        AND use_status = "Y"
+	</select>
+	
+	
+		<select id="getUserListCnt" resultType="Integer">
+		SELECT COUNT(*) FROM user_info
+		where 1=1 AND use_status = "Y"
+		<if test='userName != null and userName != ""'>
+			and user_name like concat('%', #{userName}, '%')
+		</if> 
+		</select>
+	
+	
+	  	<select id="getUserCheck" resultType="Integer">
+		SELECT 
+		    COUNT(*) as cnt
+		FROM
+		    user_info
+		WHERE
+		    login_id = #{loginId}
+		     	AND use_status = "Y"
+	  </select>
+  	
+
+
+  	<!-- 유저 등록  --> 
+    <insert id="insertUser" useGeneratedKeys="true"  keyProperty="userId" parameterType="com.softleaf.groupware.dto.UserDTO" >
+		INSERT INTO user_info
+		(
+			login_id, 
+			email, 
+			user_password,  
+			user_name,  
+			user_phone_num,
+			roll_id,
+			use_status,
+			create_id, 
+			create_date, 
+			update_id, 
+			update_date 
+		)
+		VALUES
+		(
+			#{loginId},
+			#{email},
+			#{userPassword},
+			#{userName},
+			#{userPhoneNum},
+			#{rollId},
+			#{useStatus},
+			0,
+            date_format(now(),'%Y-%m-%d %H:%i:%s'),
+			0,
+            date_format(now(),'%Y-%m-%d %H:%i:%s')
+		)
+    </insert>
+    
+    
+    
+    
+	<update id="updateUser" parameterType="com.softleaf.groupware.dto.UserDTO">
+		UPDATE user_info
+		   SET 
+		   update_date = date_format(now(),'%Y-%m-%d %H:%i:%s')
+		   ,update_id = #{updateId}
+		   <if test="loginId != null">
+		   ,login_id = #{loginId}
+		   </if>
+   	   	   <if test="userPassword != null">
+		   ,user_password = #{userPassword}
+		   </if>
+	   	   <if test="userName != null">
+		   ,user_name = #{userName}
+		   </if>
+   	   	   <if test="email != null">
+		   ,email = #{email}
+		   </if>
+   	   	   <if test="userPhoneNum != null">
+		   ,user_phone_num = #{userPhoneNum}
+		   </if>
+  	   	   <if test="useStatus != null">
+		   ,use_status = #{useStatus}
+		   </if>
+   	   	   <if test="rollId != 0">
+		   ,roll_id = #{rollId}
+		   </if>
+		   WHERE 
+		   	 user_id = #{userId}
+	</update>
+
+
+	<update id="deleteUser" parameterType="Map">
+			UPDATE user_info
+			   SET use_status = "N"
+			 WHERE 
+			<choose>
+			<when test="userIdList != null">
+				user_id in 
+				<foreach collection="userIdList" item="item" index="index" separator="," open="(" close=")">
+		            #{item}
+		        </foreach>	
+			</when>
+			<otherwise>
+				user_id = #{userId}
+			</otherwise>
+		</choose>	
+	</update>
+  	
+	
+	<select id="getUserList" resultType="com.softleaf.groupware.dto.UserDTO">
+		SELECT 
+		    u.user_id,
+		    u.login_id,
+		    u.user_password,
+		    u.user_name,
+		    u.email,
+		    u.user_phone_num,
+		    u.use_status,
+		    u.delete_status,
+		    u.roll_id,
+		    u.create_id,
+		    u.create_date,
+		    u.update_id,
+		    u.update_date,
+		    r.roll_name
+		FROM
+		    user_info AS u
+		    LEFT OUTER JOIN roll_code_info AS r ON u.roll_id = r.roll_id
+		WHERE
+		    use_status = 'Y' AND 1 = 1
+		<if test='userName != null and userName != ""'>
+			and u.user_name like concat('%', #{userName}, '%')
+		</if> 
+		order by user_id desc
+  		limit #{startNum}, #{rowsPerPage}
+	</select>
+  	
+  	
+  	
+  	
+	<select id="getUserInfo" resultType="com.softleaf.groupware.dto.UserDTO">
+		SELECT
+		   user_id,
+		   login_id,
+		   user_password,
+		   user_name,
+		   email,
+		   user_phone_num,
+		   use_status,
+		   roll_id
+		FROM
+			user_info
+		WHERE
+			user_id = #{idx}
+				AND use_status = "Y"
+	</select>
+  	
+  
+</mapper>

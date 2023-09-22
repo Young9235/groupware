@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.softleaf.groupware.dao.BoardMapper">
+	
+	<select id="getBoardListCnt" resultType="Integer">
+		SELECT COUNT(*) FROM tb_board_info 
+		where useYn = 'Y'
+		<if test='schTitle != null and schTitle != ""'>
+			and title like concat('%', #{schTitle}, '%')
+		</if> 
+	</select>
+
+  	<select id="getBoardList" resultType="com.softleaf.groupware.dto.Board">
+  		select
+			A.boardId, 				
+			A.boardType, 
+			A.title, 			
+			A.contents, 	
+			A.readCnt, 		
+			A.createId, 		
+			A.createDate, 			
+			A.updateId, 		
+			A.updateDate, 			
+			A.useYn,
+			(select Count(*) cnt from tb_attatch_info AT where AT.boardId = A.boardId) as attachFileCnt,
+			(select B.user_name from user_info B where A.createId = B.user_id) user_name
+		from tb_board_info A
+		where useYn = 'Y'
+		<if test='boardId != null and boardId != ""'>
+			and A.boardId like concat('%', #{boardId}, '%')
+		</if> 
+		<if test="schTitle != null and schTitle != ''">
+				and A.title like concat('%', #{schTitle}, '%')
+		</if>
+  		limit #{startNum}, #{rowsPerPage}
+  	</select>
+  
+	<insert id="insertBoard" parameterType="Map">
+		INSERT INTO tb_board_info
+		(
+			boardId,  
+			boardType, 
+			title, 
+			contents, 
+			readCnt, 
+			useYn,
+			createId, 
+			createDate, 
+			updateId, 
+			updateDate		
+		)
+		VALUES
+		(
+			#{boardId},
+			#{boardType},
+			#{title},
+			#{contents},
+			#{readCnt},
+		    #{useYn},
+		    #{userId},
+		    date_format(now(),'%Y-%m-%d %H:%i:%s'),
+		    #{userId},
+		    date_format(now(),'%Y-%m-%d %H:%i:%s')
+		)
+	</insert>
+	
+	<select id="getBoardInfo" parameterType="Map" resultType="com.softleaf.groupware.dto.Board">
+       	SELECT A.boardId,
+			    A.boardType,
+			    A.readCnt,
+			    A.createId,
+			    A.createDate,
+			    A.updateId,
+			    A.updateDate,
+			    A.useYn,
+			    A.title,
+			    A.contents,
+			    B.user_name AS createNm,
+			    (select B.user_name from user_info B where A.createId = B.user_id) user_name,
+			    (select Count(*) cnt from tb_attatch_info AT where AT.boardId = A.boardId) as attachFileCnt,
+			    (select group_concat(C.orgFileNm separator ',' ) from tb_attatch_info C where C.boardId = A.boardId) as orgFileNm,
+			    (select group_concat(C.fileSize separator ',') from tb_attatch_info C where C.boardId = A.boardId) as fileSize,
+			    (select group_concat(C.saveFileNm separator ',') from tb_attatch_info C where C.boardId = A.boardId) as saveFileNm,
+			    (select group_concat(D.attatchId separator ',') from tb_attatch_info D where A.boardId = D.boardId) as attatchId
+		FROM tb_board_info  AS A
+			INNER JOIN user_info AS B ON A.createId = B.user_id
+		where 
+			A.boardId = #{boardId}
+  	</select>
+  	
+  	<update id="updateBoard" parameterType="Map">
+		UPDATE tb_board_info
+		SET
+			<if test="boardType != null">
+				boardType = #{boardType},
+			</if>	
+			<if test="title != null">
+				title = #{title},
+			</if>
+			<if test="contents != null">
+				contents = #{contents},
+			</if>
+			<if test="readCntPlus != null">
+				readCnt = readCnt+1,
+			</if>
+			<if test="useYn != null">
+				useYn = #{useYn},
+			</if>
+			<if test="userId != null">
+				updateId = #{userId},
+			</if>
+			updateDate = date_format(now(),'%Y-%m-%d %H:%i:%s')
+		WHERE 
+			boardId = #{boardId}
+				
+	</update>
+
+	
+	<update id="deleteBoard" parameterType="Map">
+		update tb_board_info
+		set useYn = 'N'
+		where
+		<choose>
+			<when test="boardIdList != null">
+				boardId in 
+				<foreach collection="boardIdList" item="item" index="index" separator="," open="(" close=")">
+		            #{item}
+		        </foreach>	
+			</when>
+			<otherwise>
+				boardId = #{boardId}
+			</otherwise>
+		</choose>	
+	</update>
+	
+</mapper>

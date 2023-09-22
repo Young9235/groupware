@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.softleaf.groupware.dao.AuthMapper">
+
+	<select id="getAuthListCnt" resultType="Integer">
+		SELECT COUNT(*) FROM auth_info 
+		WHERE use_status = 'Y' AND delete_status = 'N'
+		<if test='authName != null and authName != ""'>
+			AND auth_name like concat('%', #{authName}, '%')
+		</if> 
+	</select>
+	
+  	<select id="getAuthList" resultType="com.softleaf.groupware.dto.Auth">
+  		select
+			A.auth_id, 				
+			A.auth_name, 			
+			A.auth_desc, 	
+			A.use_status, 		
+			A.delete_status, 		
+			A.create_id, 			
+			A.create_date, 		
+			A.update_id, 			
+			A.update_date,
+			(select B.user_name from user_info B where A.create_id = B.user_id) user_name
+		from auth_info A
+		where use_status = 'Y' and delete_status = 'N'
+		<if test='authName != null and authName != ""'>
+			and A.auth_name like concat('%', #{authName}, '%')
+		</if> 
+		<choose>
+			<when test='pageMode == "USER"'> <!-- 사용자 관리쪽 조회시 필요 -->
+				order by auth_id ASC
+			</when>
+			<otherwise>
+				order by auth_id ASC
+				limit #{startNum}, #{rowsPerPage}
+			</otherwise>
+		</choose>
+  	</select>
+  
+	<insert id="insertAuth" parameterType="com.softleaf.groupware.dto.Auth">
+		<selectKey keyProperty="lastIdx" resultType="int" order="AFTER">
+	        SELECT LAST_INSERT_ID()
+	    </selectKey>
+		INSERT INTO auth_info 
+		(	
+			auth_name, 		
+			auth_desc, 	
+			use_status, 	
+			delete_status,
+			create_id, 		
+			create_date, 	
+			update_id, 		
+			update_date
+		)
+		VALUES 
+		(	
+			#{authName}, 		
+			#{authDesc}, 	
+			#{useStatus}, 		
+			#{deleteStatus}, 		
+			#{userId},
+			date_format(now(),'%Y-%m-%d'),
+			#{userId}, 		
+			date_format(now(),'%Y-%m-%d')
+		)
+	</insert>
+	
+	<update id="updateAuth" parameterType="com.softleaf.groupware.dto.Auth">
+		UPDATE auth_info 
+		SET 
+			<if test="authName != null">
+				auth_name = #{authName},
+			</if>
+			auth_desc = #{authDesc}, 
+			use_status = #{useStatus},
+			delete_status = #{deleteStatus},
+			update_id = #{userId}, 		
+			update_date = date_format(now(),'%Y-%m-%d')
+		WHERE
+			auth_id = #{authId}
+	</update>
+	
+	<select id="getAuthInfo" parameterType="Map" resultType="com.softleaf.groupware.dto.Auth">
+  		SELECT A.auth_id, 				
+			A.auth_name, 			
+			A.auth_desc, 
+			A.use_status, 		
+			A.delete_status, 		
+			A.create_id, 			
+			A.create_date, 		
+			A.update_id, 			
+			A.update_date
+		FROM auth_info A
+		where A.auth_id = #{authId}
+  	</select>
+  	
+  	<select id="getMenuAuthMapping" parameterType="Map" resultType="Integer">
+  		SELECT A.menu_id
+		FROM menu_auth_mapping A
+		where A.auth_id = #{authId}
+  	</select>
+  	
+  	<insert id="insertMenuAuthMapping" parameterType="Map">
+		INSERT INTO menu_auth_mapping 
+		(	
+			menu_id, 		
+			auth_id, 	
+			create_id, 		
+			create_date
+		)
+		VALUES 
+		(		
+			#{menuId},		
+			#{authId},		
+			#{userId},
+			date_format(now(),'%Y-%m-%d')
+		)
+	</insert>
+  	
+  	<delete id="deleteMenuAuthMapping" parameterType="Map">
+  		delete from menu_auth_mapping
+  		where auth_id = #{authId}
+  	</delete>
+	
+	<update id="deleteAuth" parameterType="Map">
+		update auth_info
+		set use_status = 'N'
+		where
+		<choose>
+			<when test="authIdList != null">
+				auth_id in 
+				<foreach collection="authIdList" item="item" index="index" separator="," open="(" close=")">
+		            #{item}
+		        </foreach>	
+			</when>
+			<otherwise>
+				auth_id = #{authId}
+			</otherwise>
+		</choose>	
+	</update>
+	
+
+</mapper>

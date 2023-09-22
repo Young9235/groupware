@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.softleaf.groupware.dao.UserAuthMapper">
+
+	<!-- 권한 매핑  -->
+	<insert id="insertAuthMapping" parameterType="com.softleaf.groupware.dto.UserDTO">
+    	INSERT INTO user_auth_grant_mapping
+		(
+			auth_id, 
+			user_id, 
+			create_id,  
+			create_date  
+		)
+		VALUES
+		(
+			#{authId},
+			#{userId},
+			#{id},
+            date_format(now(),'%Y-%m-%d %H:%i:%s')
+		)
+	</insert>
+
+	<insert id="insertAuth" parameterType="Map">
+		INSERT INTO tb_userauth_info
+		(
+			authId,
+			userId,
+			authName
+		)
+		VALUES
+		(
+			#{authId},
+			#{userId},
+			#{authName}
+		)
+	</insert>
+
+  
+</mapper>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.softleaf.groupware.dao.AttachInfoMapper">
+    
+    <select id="getAttachInfoCnt" parameterType="Map" resultType="Integer">
+        SELECT Count(attatchId) cnt
+		FROM tb_attatch_info  AS A
+			INNER JOIN tb_board_info AS B ON A.boardId = B.boardId
+		where 1=1
+			<if test="useYn != null">
+				and B.useYn = #{useYn}
+			</if>
+			<if test="boardId != null">
+				and A.boardId = #{boardId}
+			</if>
+			<if test="attatchId != null">
+				and A.attatchId = #{attatchId}
+			</if>
+    </select>
+    
+    <select id="getAttachInfo" parameterType="Map" resultType="com.softleaf.groupware.dto.AttachInfo">
+      	SELECT A.boardId,
+      		   A.attatchId,
+      		   A.orgFileNm,
+      		   A.saveFilePath,
+      		   A.fileSize,
+      		   A.fileExt,
+      		   A.saveFileNm,
+      		   A.createId,
+      		   A.createDate
+		FROM tb_attatch_info  AS A
+			INNER JOIN tb_board_info AS B ON A.boardId = B.boardId
+		where 1=1
+			<if test="attatchId != null">
+				and A.attatchId =  #{attatchId}
+			</if>
+			<if test="boardId != null">
+				and A.boardId = #{boardId}
+			</if>
+    </select>
+    
+    <select id="getAttachInfoList" parameterType="Map" resultType="com.softleaf.groupware.dto.AttachInfo">
+     	SELECT A.boardId,
+     		   A.attatchId,
+     		   A.orgFileNm,
+     		   A.saveFilePath,
+     		   A.fileSize,
+     		   A.fileExt,
+     		   A.saveFileNm,
+     		   A.createId,
+     		   A.createDate
+		FROM tb_attatch_info  AS A
+			INNER JOIN tb_board_info AS B ON A.boardId = B.boardId
+		where 1=1
+		<if test="useYn != null">
+			and B.useYn = #{useYn}
+		</if>
+		<if test="boardId != null">
+			and A.boardId = #{boardId}
+		</if>
+    </select>
+    
+    <insert id="insertAttachInfo" parameterType="Map">
+    	INSERT INTO tb_attatch_info
+		(
+			boardId,  
+			attatchId, 
+			orgFileNm, 
+			saveFilePath, 
+			fileSize, 
+			fileExt,
+			saveFileNm,
+			createId, 
+			createDate		
+		)
+		VALUES
+		(
+			#{boardId},
+			#{attatchId},
+			#{orgFileNm},
+			#{saveFilePath},
+			#{fileSize},
+		    #{fileExt},
+		    #{saveFileNm},
+		    #{userId},
+		    date_format(now(),'%Y-%m-%d %H:%i:%s')
+		)
+    </insert>
+    
+    <delete id="deleteAttachInfo" parameterType="Map">
+    	delete from tb_attatch_info		
+		WHERE 
+		<choose>
+			<when test="attachInfoDelList != null">
+				attatchId in 
+				<foreach collection="attachInfoDelList" item="item" index="index" separator="," open="(" close=")">
+		            #{item}
+		        </foreach>	
+			</when>
+			<when test="boardIdALL != null">
+				boardId = #{boardIdALL}
+			</when>
+			<otherwise>
+			boardId = #{boardId}
+			and attatchId = #{attatchId}
+			</otherwise>
+		</choose>	
+    </delete>
+    
+</mapper>

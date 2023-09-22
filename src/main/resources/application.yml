@@ -1,0 +1,45 @@
+server:
+  port: 8888
+#  servlet:
+#    context-path: /sf
+# 온라인 인코더 사이트 https://www.convertstring.com/ko/EncodeDecode/Base64Encode
+
+logging:
+  config: classpath:logback/logback.xml
+
+jwt:
+  http:
+    request:
+      header: Authorization
+  signing:
+    key:
+      secret: Z3JvdXB3YXJlLXNlcnZlci1leGFtcGxlLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtZ3JvdXB3YXJlLXNlcnZlci1leGFtcGxlLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQ=
+  access:
+    expiration:
+      in:
+        seconds: 1800 # 30분 1800 -> test 10분
+  refresh:
+    expiration:
+      in:
+        seconds: 14400  # 4시간
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  web:
+    resources:
+      static-locations: classpath:static/
+  mvc:
+    view:
+      suffix: .html
+  datasource:
+    hikari:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/localdb?characterEncoding=UTF-8&serverTimezone=UTC
+      username: root
+      password: 1234
+  jackson:
+    property-naming-strategy: SNAKE_CASE  # Request-body, json 타입클래스를 snake case KEY값을 camel case로 파싱
+      

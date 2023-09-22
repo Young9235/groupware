@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.softleaf.groupware.dao.MenuMapper">
+
+	
+		<select id="getMenuListCnt" resultType="Integer">
+		SELECT COUNT(*) FROM menu_info
+		where 1=1 AND use_status = "Y"
+		<if test='menuName != null and menuName != ""'>
+			and menu_name like concat('%', #{menuName}, '%')
+		</if> 
+		<if test='menuType != null and menuType != ""'>
+			and menu_type = #{menuType}
+		</if> 
+		</select>
+	
+	
+	<select id="getMenuList" resultType="com.softleaf.groupware.dto.MenuDTO">
+		SELECT 
+		    m.menu_id,
+		    m.menu_name,
+		   (select menu_name from menu_info where menu_id = m.parent_menu) as parentMenuNm,
+		    m.menu_url,
+		    m.menu_desc,
+		    m.menu_img_path,
+		    m.menu_level,
+		    m.menu_order,
+		    m.menu_type,
+		    m.use_status,
+		    m.delete_status,
+		    m.menu_order,
+		    m.create_id,
+		    m.create_date,
+		    m.update_id,
+		    m.update_date
+		FROM
+		    menu_info AS m
+		WHERE
+		    use_status = 'Y' AND 1 = 1
+		<if test='menuName != null and menuName != ""'>
+			and m.menu_name like concat('%', #{menuName}, '%')
+		</if>
+		<if test='menuType != null and menuType != ""'>
+			and m.menu_type = #{menuType}
+		</if> 
+		<choose>
+			<when test='pageMode == "AUTH"'> <!-- 권한 관리쪽 메뉴 맵핑시 필요 -->
+				order by menu_id ASC
+			</when>
+			<otherwise>
+				order by menu_id DESC
+				limit #{startNum}, #{rowsPerPage}
+			</otherwise>
+		</choose>
+	</select> 
+	  	
+	  	
+	  	<!-- 메뉴 상세보기  -->
+   	  	<select id="getMenuInfo" resultType="com.softleaf.groupware.dto.MenuDTO">
+		SELECT 
+		    m.menu_id,
+		    m.menu_name,
+		    (select menu_name from menu_info where menu_id = m.parent_menu) as parentMenuNm,
+		    m.parent_menu,
+		    m.menu_url,
+		    m.menu_desc,
+		    m.menu_img_path,
+		    m.menu_level,
+		    m.menu_order,
+		    m.menu_type,
+		    m.use_status,
+		    m.delete_status,
+		    menu_order
+		FROM
+		    menu_info AS m
+		WHERE
+		    menu_id = #{idx}
+				AND use_status = "Y"
+ 		</select>		
+ 		
+ 		
+ 		<!-- 상위메뉴 찾기  -->
+   	  	<select id="getFindParentMenu" resultType="Integer">
+		SELECT 
+		    menu_id
+		FROM
+		    menu_info
+		WHERE
+		     use_status = "Y"
+			 AND menu_name = #{parentMenu};
+ 		</select>	
+	  	
+	  	
+	  	<!-- 메뉴 등록하기  -->
+    <insert id="insertMenu" parameterType="com.softleaf.groupware.dto.MenuDTO">
+		INSERT INTO menu_info
+		(
+			menu_name, 
+			parent_menu, 
+			menu_url, 
+			menu_desc,  
+			menu_img_path,  
+			menu_level,
+			menu_order,
+			menu_type,
+			use_status,
+			delete_status,
+			create_id, 
+			create_date, 
+			update_id, 
+			update_date 
+		)
+		VALUES
+		(
+			#{menuName},
+			#{parentMenu},
+			#{menuUrl},
+			#{menuDesc},
+			#{menuImgPath},
+			#{menuLevel},
+			#{menuOrder},
+			#{menuType},
+			#{useStatus},
+			"N",
+			0,
+            date_format(now(),'%Y-%m-%d %H:%i:%s'),
+			0,
+            date_format(now(),'%Y-%m-%d %H:%i:%s')
+		)
+    </insert>
+     
+    
+    
+      	<update id="updateMenu" parameterType="com.softleaf.groupware.dto.MenuDTO">
+		UPDATE menu_info
+		   SET 
+		   update_date = date_format(now(),'%Y-%m-%d %H:%i:%s')
+		   ,update_id = #{updateId}
+		   ,menu_name = #{menuName}
+		   ,menu_type = #{menuType}
+		   ,parent_menu = #{parentMenu}
+		   ,menu_url = #{menuUrl}
+		   ,menu_level = #{menuLevel}
+		   ,menu_order = #{menuOrder}
+		   ,use_status = #{useStatus}
+   	   	   <if test="menuDesc != null">
+		   ,menu_desc = #{menuDesc}
+		   </if>
+   	   	   <if test="menuImgPath != null">
+		   ,menu_img_path = #{menuImgPath}
+		   </if>
+		   WHERE 
+		   	menu_id = #{menuId}
+  		</update>
+
+
+	  	<update id="deleteMenu" parameterType="Map">
+			UPDATE menu_info
+			   SET use_status = "N"
+			 WHERE 
+			<choose>
+			<when test="menuIdList != null">
+				menu_id in 
+				<foreach collection="menuIdList" item="item" index="index" separator="," open="(" close=")">
+		            #{item}
+		        </foreach>	
+			</when>
+			<otherwise>
+				menu_id = #{menuId}
+			</otherwise>
+		</choose>	
+  		</update>
+  	
+  	
+
+
+  
+</mapper>
