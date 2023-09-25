@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import withRouter from 'src/components/Common/withRouter';
+import { removeCookie } from 'src/common/cookie';
+import Login from 'src/pages/Authentication/Login';
 // import { logoutUser } from "../../store/actions";
 
 //redux
@@ -8,6 +10,8 @@ import withRouter from 'src/components/Common/withRouter';
 // import { useNavigate } from 'react-router-dom';
 
 const Logout = () => {
+  removeCookie('access_token');
+  removeCookie('refresh_token');
   // const history = useNavigate();
   // const dispatch = useDispatch();
   //
@@ -15,7 +19,7 @@ const Logout = () => {
   //   dispatch(logoutUser(history));
   // }, [dispatch, history]);
 
-  return <></>;
+  return <Login />;
 };
 
 Logout.propTypes = {

@@ -1,34 +1,34 @@
-import PropTypes from "prop-types";
-import React, { useState } from "react";
+import PropTypes from 'prop-types';
+import React, { useState } from 'react';
 
-import { connect } from "react-redux";
-import { Row, Col } from "reactstrap";
-import { Link } from "react-router-dom";
+import { connect } from 'react-redux';
+import { Row, Col } from 'reactstrap';
+import { Link } from 'react-router-dom';
 
 // Reactstrap
-import { Dropdown, DropdownToggle, DropdownMenu } from "reactstrap";
+import { Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
 
 // Import menuDropdown
-import LanguageDropdown from "../CommonForBoth/TopbarDropdown/LanguageDropdown";
-import NotificationDropdown from "../CommonForBoth/TopbarDropdown/NotificationDropdown";
-import ProfileMenu from "../CommonForBoth/TopbarDropdown/ProfileMenu";
+import LanguageDropdown from 'src/components/CommonForBoth/TopbarDropdown/LanguageDropdown';
+import NotificationDropdown from 'src/components/CommonForBoth/TopbarDropdown/NotificationDropdown';
+import ProfileMenu from 'src/components/CommonForBoth/TopbarDropdown/ProfileMenu';
 
 // import images
-import github from "../../assets/images/brands/github.png";
-import bitbucket from "../../assets/images/brands/bitbucket.png";
-import dribbble from "../../assets/images/brands/dribbble.png";
-import dropbox from "../../assets/images/brands/dropbox.png";
-import mail_chimp from "../../assets/images/brands/mail_chimp.png";
-import slack from "../../assets/images/brands/slack.png";
+import github from 'src/assets/images/brands/github.png';
+import bitbucket from 'src/assets/images/brands/bitbucket.png';
+import dribbble from 'src/assets/images/brands/dribbble.png';
+import dropbox from 'src/assets/images/brands/dropbox.png';
+import mail_chimp from 'src/assets/images/brands/mail_chimp.png';
+import slack from 'src/assets/images/brands/slack.png';
 
-import logo from "../../assets/images/logo.svg";
-import logoLightSvg from "../../assets/images/logo-light.svg";
+import logo from 'src/assets/images/logo.svg';
+import logoLightSvg from 'src/assets/images/logo-light.svg';
 
 //i18n
-import { withTranslation } from "react-i18next";
+import { withTranslation } from 'react-i18next';
 
 // Redux Store
-import { toggleLeftmenu, changeSidebarType } from "../../store/actions";
+import { toggleLeftmenu, changeSidebarType } from 'src/store/actions';
 
 const Header = (props) => {
   const [search, setsearch] = useState(false);
@@ -46,9 +46,7 @@ const Header = (props) => {
       } else if (document.documentElement.mozRequestFullScreen) {
         document.documentElement.mozRequestFullScreen();
       } else if (document.documentElement.webkitRequestFullscreen) {
-        document.documentElement.webkitRequestFullscreen(
-          Element.ALLOW_KEYBOARD_INPUT
-        );
+        document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
       }
     } else {
       if (document.cancelFullScreen) {
@@ -64,10 +62,10 @@ const Header = (props) => {
   function tToggle() {
     var body = document.body;
     if (window.screen.width <= 998) {
-      body.classList.toggle("sidebar-enable");
+      body.classList.toggle('sidebar-enable');
     } else {
-      body.classList.toggle("vertical-collpsed");
-      body.classList.toggle("sidebar-enable");
+      body.classList.toggle('vertical-collpsed');
+      body.classList.toggle('sidebar-enable');
     }
   }
 
@@ -106,7 +104,7 @@ const Header = (props) => {
                 <input
                   type="text"
                   className="form-control"
-                  placeholder={props.t("Search") + "..."}
+                  placeholder={props.t('Search') + '...'}
                 />
                 <span className="bx bx-search-alt" />
               </div>
@@ -127,8 +125,8 @@ const Header = (props) => {
               <div
                 className={
                   search
-                    ? "dropdown-menu dropdown-menu-lg dropdown-menu-end p-0 show"
-                    : "dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
+                    ? 'dropdown-menu dropdown-menu-lg dropdown-menu-end p-0 show'
+                    : 'dropdown-menu dropdown-menu-lg dropdown-menu-end p-0'
                 }
                 aria-labelledby="page-header-search-dropdown"
               >
@@ -161,10 +159,7 @@ const Header = (props) => {
                 setsocialDrp(!socialDrp);
               }}
             >
-              <DropdownToggle
-                className="btn header-item noti-icon "
-                tag="button"
-              >
+              <DropdownToggle className="btn header-item noti-icon " tag="button">
                 <i className="bx bx-customize" />
               </DropdownToggle>
               <DropdownMenu className="dropdown-menu-lg dropdown-menu-end">
@@ -246,8 +241,7 @@ Header.propTypes = {
 };
 
 const mapStatetoProps = (state) => {
-  const { layoutType, showRightSidebar, leftMenu, leftSideBarType } =
-    state.Layout;
+  const { layoutType, showRightSidebar, leftMenu, leftSideBarType } = state.Layout;
   return { layoutType, showRightSidebar, leftMenu, leftSideBarType };
 };
 
