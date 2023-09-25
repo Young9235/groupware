@@ -3652,3 +3652,9 @@ Unconditional classes:
 ▶DEBUG 10:10:09:.029 [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool[fillPool:518] - HikariPool-1 - Fill pool skipped, pool is at sufficient level.
 ▶DEBUG 10:10:39:.038 [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool[logPoolState:421] - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
 ▶DEBUG 10:10:39:.039 [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool[fillPool:518] - HikariPool-1 - Fill pool skipped, pool is at sufficient level.
+▶DEBUG 10:11:09:.045 [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool[logPoolState:421] - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+▶DEBUG 10:11:09:.045 [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool[fillPool:518] - HikariPool-1 - Fill pool skipped, pool is at sufficient level.
+▶DEBUG 10:11:39:.058 [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool[logPoolState:421] - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+▶DEBUG 10:11:39:.058 [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool[fillPool:518] - HikariPool-1 - Fill pool skipped, pool is at sufficient level.
+▶DEBUG 10:12:09:.063 [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool[logPoolState:421] - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+▶DEBUG 10:12:09:.063 [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool[fillPool:518] - HikariPool-1 - Fill pool skipped, pool is at sufficient level.
