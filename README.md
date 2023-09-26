@@ -76,3 +76,13 @@ https://velog.io/@miot2j/Spring-DB%EC%BB%A4%EB%84%A5%EC%85%98%ED%92%80%EA%B3%BC-
 #### ESLint 설정하기 
 https://baeharam.netlify.app/posts/lint/Lint-ESLint-+-Prettier-%EC%84%A4%EC%A0%95%ED%95%98%EA%B8%B0
 > 코드 일관성 및 팀플 시 규칙을 준수하기 위함, 올바른 ES6문법 체크, 문법체크 설정을 on,off 할 수 있다.
+#### .prettierrc 파일 생성(코딩간편화)
+```json
+{
+  "singleQuote": true,
+  "semi": true,
+  "tabWidth": 2,
+  "trailingComma": "all",
+  "printWidth": 80
+}
+```
