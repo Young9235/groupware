@@ -26,28 +26,31 @@ https://ko.legacy.reactjs.org/
 
 ## Backend
 - 실행 방법 
-````
-main controller : GroupwareApplication.java 파일 실행
-````
+> main controller : GroupwareApplication.java 파일 실행
+
 - 프로젝트 구조
 
 ## Frontend
 - 실행 방법 
   - React를 사용하기 위한, nodejs 서버와 yarn설치가 필요함
-  ````
-  # Clone from GitHub
-     D:\ > git clone https://github.com/Young9235/groupware.git
-  # 설정 된 모듈 설치(package.json)
-     D:\groupware\src\main\frontend > yarn 
-  # nodejs로 react 프로젝트 실행
-     D:\groupware\src\main\frontend > yarn start
-  ````
-  - nodejs로 모듈 설치
-  ````
-  yarn add (모듈명)
-  - 특정 버전 설치시 package.json 파일을 직접 수정 하는 것보다 커맨드로 입력하는 것이 좋다. 
-  ex) yarn add lamina@^1.0.6
-  ````
+  - Clone from GitHub
+    ````
+    git clone https://github.com/Young9235/groupware.git
+    ````
+  - 설정 된 모듈 설치(package.json)
+    ````
+    yarn 
+    ````
+  - nodejs로 react 프로젝트 실행
+    ````    
+    yarn start
+    ````
+      - nodejs로 모듈 설치
+      ````
+      yarn add (모듈명)
+      - 특정 버전 설치시 package.json 파일을 직접 수정 하는 것보다 커맨드로 입력하는 것이 좋다. 
+      ex) yarn add lamina@^1.0.6
+      ````
   
 - 프로젝트 구조
 - 템플릿 정보
