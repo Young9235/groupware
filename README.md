@@ -14,11 +14,11 @@
 11. SMTP 메일인증 구현 중
 
 ## 기능 설명
-### Hikari CP
+### 1. Hikari CP
 https://velog.io/@miot2j/Spring-DB%EC%BB%A4%EB%84%A5%EC%85%98%ED%92%80%EA%B3%BC-Hikari-CP-%EC%95%8C%EC%95%84%EB%B3%B4%EA%B8%B0
 > 해당 URL을 보면 히카리 풀커넥션의 장점을 알려준다. 설정방법도 나와있음, tomcat-jdbc와 성능적으로 월등히 차이남
 
-### Spring Boot jwt(로그인 인증 토큰발급 관련)
+### 2. Spring Boot jwt(로그인 인증 토큰발급 관련)
 - https://velog.io/@jkijki12/Spirng-Security-Jwt-%EB%A1%9C%EA%B7%B8%EC%9D%B8-%EC%A0%81%EC%9A%A9%ED%95%98%EA%B8%B0
 - https://llshl.tistory.com/m/32
 - https://badstorage.tistory.com/33
@@ -26,9 +26,9 @@ https://velog.io/@miot2j/Spring-DB%EC%BB%A4%EB%84%A5%EC%85%98%ED%92%80%EA%B3%BC-
 - 인프런 강좌 https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8-jwt
 - Refresh Token : https://hou27.tistory.com/entry/Refresh-Token
 
-### SMTP 메일인증
+### 3. SMTP 메일인증
 
-### react ui 관련 라이브러리
+### 4. react ui 관련 라이브러리
 - 웹/모바일 감지한 반응형 사이트 : react-device-detect
 - formik
   - form 관련 라이브러리 -> Form 상태를 다루기)
