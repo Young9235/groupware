@@ -8,7 +8,6 @@ import com.softleaf.groupware.dao.UserMapper;
 import com.softleaf.groupware.dto.UserDTO;
 import com.softleaf.groupware.exception.DuplicateMemberException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,16 +16,19 @@ import com.softleaf.groupware.service.UserService;
 
 @Service
 public class UserServiceImpl implements UserService {
-//	
-	@Autowired
-	private UserMapper userMapper;
-	
-	@Autowired
-	private UserAuthMapper userAuthMapper;
+//
+	private final UserMapper userMapper;
+
+	private final UserAuthMapper userAuthMapper;
 
 	//	private final SeqMapper seqMapper;
 	
 //	final String authStr = "AUTH_ID";
+
+	public UserServiceImpl(UserMapper userMapper, UserAuthMapper userAuthMapper) {
+		this.userMapper = userMapper;
+		this.userAuthMapper = userAuthMapper;
+	}
 
 	@Transactional
 	public UserDTO signup(UserDTO userDto) throws Exception {
@@ -97,11 +99,10 @@ public class UserServiceImpl implements UserService {
 //	}
 
 	@Transactional
-	public int insertUser(HashMap<String, Object> map) throws Exception {
+	public void insertUser(HashMap<String, Object> map) throws Exception {
 		int suc = userMapper.insertUser(map);
 		if(suc <= 0)
 			throw new IllegalArgumentException("USER 데이터베이스에 저장되지 않았습니다.");
-		return suc;
 	}
 	
 	@Transactional

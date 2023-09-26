@@ -4,7 +4,6 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { Row, Col, CardBody, Card, Alert, Container, Form, Input, FormFeedback } from 'reactstrap';
 
 //redux
-import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import withRouter from 'src/components/Common/withRouter';
 
@@ -17,29 +16,23 @@ import { useFormik } from 'formik';
 // import TwitterLogin from "react-twitter-auth"
 // import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 
-// actions
-import { loginUser } from '../../store/actions';
-// import { loginUser, socialLogin } from "../../store/actions";
-
 // import images
 import profile from 'src/assets/images/profile-img.png';
 import logo from 'src/assets/images/logo.svg';
-// import { userLogin } from 'axios-apis/backend';
 import Loader from 'src/components/Common/Loader';
-import { removeCookie } from 'src/common/cookie';
+import { getCookie, removeCookie, setCookie } from 'src/common/cookie';
 import { JWT_LOGIN } from 'src/axios-apis/url';
 import { getToken } from 'src/axios-apis/api';
-
-//Import config
-// import { facebook, google } from "../../config";
+import { useSelector } from 'react-redux';
 
 const Login = (props) => {
   const [isChecked, setIsChecked] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   useMemo(() => {
-    if (localStorage.getItem('loginId') !== null) {
+    if (getCookie('login_id')) {
       setIsChecked(true);
     } else {
       setIsChecked(false);
@@ -55,17 +48,15 @@ const Login = (props) => {
   //meta title
   document.title = 'Login | Skote - React Admin & Dashboard Template';
 
-  const dispatch = useDispatch();
-
   const validation = useFormik({
     enableReinitialize: true,
 
     initialValues: {
-      loginId: 'admin@to21.co.kr', // loginId: localStorage.getItem('loginId') || '',
-      password: '1234',
+      login_id: getCookie('login_id') || '',
+      password: '',
     },
     validationSchema: Yup.object({
-      loginId: Yup.string().required('아이디를 입력해주세요.'),
+      login_id: Yup.string().required('이메일을 입력해주세요.'),
       password: Yup.string().required('비밀번호를 입력해주세요.'),
     }),
     onSubmit: (values) => {
@@ -74,16 +65,23 @@ const Login = (props) => {
         .then(() => {
           // alert('로그인 성공!');
           navigate('/dashboard', { replace: true });
+          if (isChecked) {
+            setCookie('login_id', values.login_id);
+          } else {
+            removeCookie('login_id');
+          }
         })
         .catch((e) => {
-          alert('로그인 실패');
+          // alert('로그인 실패');
+          setError('로그인 실패');
+          console.log(e.message);
         });
       setLoading(false);
     },
   });
 
   // const { error } = useSelector((state) => ({
-  //   error: state.Login.error,
+  //   error: state.props.error,
   // }));
 
   const onChangeCheckbox = (e) => {
@@ -110,7 +108,9 @@ const Login = (props) => {
                       <Row>
                         <Col xs={7}>
                           <div className="text-primary p-4">
-                            <h5 className="text-primary">사이트에 오신 것을 환영합니다! </h5>
+                            <h5 className="text-primary">
+                              그룹웨어 사이트에 오신 것을 환영합니다!{' '}
+                            </h5>
                             <p>로그인 해주세요.</p>
                           </div>
                         </Col>
@@ -138,39 +138,35 @@ const Login = (props) => {
                             // return false;
                           }}
                         >
-                          {/*{error ? <Alert color="danger">{error.toString()}</Alert> : null}*/}
+                          {error !== '' ? <Alert color="danger">{error}</Alert> : null}
 
                           <div className="row mb-4" style={{ marginTop: '30px' }}>
-                            <label className="col-sm-2 col-form-label" style={{ width: '80px' }}>
-                              아이디
-                            </label>
-                            <div className="col-sm-3">
+                            <label className="col-sm-3 col-form-label">Email</label>
+                            <div className="col-sm-4">
                               <Input
-                                name="loginId"
+                                name="login_id"
                                 className="form-control"
-                                placeholder="아이디를 입력해주세요."
+                                placeholder="이메일을 입력해주세요."
                                 type="text"
                                 style={{ width: '300px' }}
                                 onChange={validation.handleChange}
                                 onBlur={validation.handleBlur}
-                                value={validation.values.loginId || ''}
+                                value={validation.values.login_id || ''}
                                 invalid={
-                                  !!(validation.touched.loginId && validation.errors.loginId) //touched.loginId && errors.loginId ? true : false
+                                  !!(validation.touched.login_id && validation.errors.login_id) //touched.loginId && errors.loginId ? true : false
                                 }
                               />
-                              {validation.touched.loginId && validation.errors.loginId ? (
+                              {validation.touched.login_id && validation.errors.login_id ? (
                                 <FormFeedback type="invalid" style={{ width: '150px' }}>
-                                  {validation.errors.loginId}
+                                  {validation.errors.login_id}
                                 </FormFeedback>
                               ) : null}
                             </div>
                           </div>
 
-                          <div className="row mb-4" style={{ marginTop: '30px' }}>
-                            <label className="col-sm-2 col-form-label" style={{ width: '80px' }}>
-                              비밀번호
-                            </label>
-                            <div className="col-sm-3">
+                          <div className="row mb-4">
+                            <label className="col-3 col-form-label">Password</label>
+                            <div className="col-5">
                               <Input
                                 name="password"
                                 value={validation.values.password || ''}
@@ -201,7 +197,7 @@ const Login = (props) => {
                               id="customControlInline"
                             />
                             <label className="form-check-label" htmlFor="customControlInline">
-                              Remember me
+                              이메일 저장
                             </label>
                           </div>
 

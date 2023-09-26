@@ -9,9 +9,9 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,10 +29,11 @@ import com.softleaf.groupware.service.AuthService;
 @RestController	
 @RequestMapping("/admin/auth")
 public class AuthController {
-	
+
 	private final AuthService authService;
 	private final Logger logger = LoggerFactory.getLogger(AuthController.class);
-	
+
+	//DI(의존성 주입)은 Spring 4부터 생성자 주입을 강력히 권장 -> @Autowired -> Field injection is not recommended
 	public AuthController(AuthService authService) {
 		this.authService = authService;
 	}

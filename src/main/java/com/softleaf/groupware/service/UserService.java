@@ -11,14 +11,14 @@ public interface UserService {
 
 	int getUserCheck(UserDTO user) throws Exception;
 
-	public int insertUser(HashMap<String, Object> map) throws Exception;
+	void insertUser(HashMap<String, Object> map) throws Exception;
 
 	int updateUser(UserDTO user);
 
 
-	public List<UserDTO> getUserList(HashMap<String, Object> map) throws Exception;
+	List<UserDTO> getUserList(HashMap<String, Object> map) throws Exception;
 	
-	public UserDTO getUserInfo(HashMap<String, Object> map) throws Exception;
+	UserDTO getUserInfo(HashMap<String, Object> map) throws Exception;
 //	
 
 	int getUserListCnt(HashMap<String, Object> map) throws Exception;

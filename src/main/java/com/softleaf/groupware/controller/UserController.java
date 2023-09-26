@@ -32,16 +32,18 @@ import com.softleaf.groupware.service.UserService;
 @RestController	// requestMapping으로 설정해주지 않아도 됨
 @RequestMapping("/user")
 public class UserController {
-	
-	@Autowired
-	private UserService userService;
-	
-	@Autowired
-	private AuthService authService;
-	
+
+	private final UserService userService;
+
+	private final AuthService authService;
+
 	private final Logger logger = LoggerFactory.getLogger(CodeController.class);
 
-	
+	public UserController(UserService userService, AuthService authService) {
+		this.userService = userService;
+		this.authService = authService;
+	}
+
 	// 로그인 중복체크
 	@GetMapping("/check")	//ResponseEntity : http status 코드도 같이 리턴 할 수 있다.
 	public ResponseEntity<?> getUserCheck(UserDTO user) throws Exception {

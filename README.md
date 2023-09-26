@@ -13,6 +13,9 @@
 10. Rest API 형태로 백엔드 구성
 11. SMTP 메일인증 구현 중
 
+## ERD
+https://www.erdcloud.com/d/HBWnJqYbRkjvvFojp
+
 ## 기능 설명
 ### 1. Hikari CP
 https://velog.io/@miot2j/Spring-DB%EC%BB%A4%EB%84%A5%EC%85%98%ED%92%80%EA%B3%BC-Hikari-CP-%EC%95%8C%EC%95%84%EB%B3%B4%EA%B8%B0
@@ -27,6 +30,9 @@ https://velog.io/@miot2j/Spring-DB%EC%BB%A4%EB%84%A5%EC%85%98%ED%92%80%EA%B3%BC-
 - Refresh Token : https://hou27.tistory.com/entry/Refresh-Token
 
 ### 3. SMTP 메일인증
+- https://green-bin.tistory.com/83
+- https://velog.io/@kjh950330/%ED%9A%8C%EC%9B%90%EA%B0%80%EC%9E%85-%EC%9D%B4%EB%A9%94%EC%9D%BC-%EC%9D%B8%EC%A6%9D-%EA%B8%B0%EB%8A%A5-%EA%B5%AC%ED%98%84
+- https://kimfk567.tistory.com/55
 
 ### 4. React UI 관련 라이브러리
 - 웹/모바일 감지한 반응형 사이트 : react-device-detect

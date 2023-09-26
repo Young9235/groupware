@@ -40,30 +40,33 @@ const Register = (props) => {
 
     initialValues: {
       login_id: '',
-      email: '',
       username: '',
       password: '',
       password_confirm: '',
       phone_num: '',
     },
     validationSchema: Yup.object({
-      login_id: Yup.string().required('Please Enter Your Id'),
-      username: Yup.string().required('Please Enter Your Username'),
-      password: Yup.string().required('Please Enter Your Password'),
-      password_confirm: Yup.string().required('Please Enter Your Password Confirm'),
-      email: Yup.string().required('Please Enter Your Email'),
-      phone_num: Yup.string().required('Please Enter Your Phone Number'),
+      login_id: Yup.string()
+        .required('이메일을 입력해주세요.')
+        .matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, '이메일 양식이 아닙니다.'),
+      username: Yup.string().required('이름을 입력해주세요.'),
+      password: Yup.string().required('비밀번호를 입력해주세요.'),
+      password_confirm: Yup.string().required('비밀번호 확인을 입력해주세요.'),
+      phone_num: Yup.string().matches(
+        /^01([0|1|6|7|8|9])-?([0-9]{4})-?([0-9]{4})$/,
+        '전화번호 양식이 아닙니다.'
+      ),
     }),
     onSubmit: (values) => {
       dispatch(registerUser(values));
     },
   });
 
-  const { user, registrationError, loading } = useSelector((state) => ({
-    user: state.Account.user,
-    registrationError: state.Account.registrationError,
-    loading: state.Account.loading,
-  }));
+  // const { user, registrationError, loading } = useSelector((state) => ({
+  //   user: state.Account.user,
+  //   registrationError: state.Account.registrationError,
+  //   loading: state.Account.loading,
+  // }));
 
   // useEffect(() => {
   //   dispatch(apiError(""));
@@ -113,23 +116,23 @@ const Register = (props) => {
                         return false;
                       }}
                     >
-                      {user && user ? (
-                        <Alert color="success">Register User Successfully</Alert>
-                      ) : null}
+                      {/*{user && user ? (*/}
+                      {/*  <Alert color="success">Register User Successfully</Alert>*/}
+                      {/*) : null}*/}
 
-                      {registrationError && registrationError ? (
-                        <Alert color="danger">{registrationError}</Alert>
-                      ) : null}
+                      {/*{registrationError && registrationError ? (*/}
+                      {/*  <Alert color="danger">{registrationError}</Alert>*/}
+                      {/*) : null}*/}
 
                       <div className="mb-3">
                         <Label className="form-label">
-                          아이디 <span style={{ color: 'red' }}>*</span>
+                          이메일(아이디) <span style={{ color: 'red' }}>*</span>
                         </Label>
                         <Input
                           id="login_id"
                           name="login_id"
                           className="form-control"
-                          placeholder="Enter Your ID"
+                          placeholder="Enter Email(ID)"
                           type="email"
                           onChange={validation.handleChange}
                           onBlur={validation.handleBlur}
@@ -202,22 +205,20 @@ const Register = (props) => {
                       </div>
 
                       <div className="mb-3">
-                        <Label className="form-label">
-                          이메일 <span style={{ color: 'red' }}>*</span>
-                        </Label>
+                        <Label className="form-label">연락처</Label>
                         <Input
-                          id="email"
-                          name="email"
+                          id="phone_num"
+                          name="phone_num"
                           className="form-control"
-                          placeholder="Enter email"
-                          type="email"
+                          placeholder="Enter Phone Number"
+                          type="text"
                           onChange={validation.handleChange}
                           onBlur={validation.handleBlur}
-                          value={validation.values.email || ''}
-                          invalid={!!(validation.touched.email && validation.errors.email)}
+                          value={validation.values.phone_num || ''}
+                          invalid={!!(validation.touched.phone_num && validation.errors.phone_num)}
                         />
-                        {validation.touched.email && validation.errors.email ? (
-                          <FormFeedback type="invalid">{validation.errors.email}</FormFeedback>
+                        {validation.touched.phone_num && validation.errors.phone_num ? (
+                          <FormFeedback type="invalid">{validation.errors.phone_num}</FormFeedback>
                         ) : null}
                       </div>
 
