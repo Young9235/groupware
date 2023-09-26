@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -50,8 +51,10 @@ public class AuthController {
 		HashMap<String, Object> map = new HashMap<>();
 		JSONArray dataList = new JSONArray();
 		JSONObject jsonResult = new JSONObject();
-		
-		
+
+//		String loginId = SecurityContextHolder.getContext().getAuthentication().getName();
+//		logger.debug("loginId ===========> " + loginId);
+
 		if("USER".equals(search.getPageMode()) && search.getPageMode() != null) {
 			map.put("pageMode", search.getPageMode());
 		} else {
@@ -166,7 +169,7 @@ public class AuthController {
 		
 		ArrayList<String> authIdList = param.getAuthIdList();
 		
-		if(authIdList.size() <= 0) {
+		if(authIdList.size() == 0) {
 			throw new IllegalArgumentException("param In authIdList not Exits ");
 		} else {
 			map.put("authIdList", authIdList);

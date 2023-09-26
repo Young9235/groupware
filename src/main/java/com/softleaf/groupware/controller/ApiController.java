@@ -53,7 +53,7 @@ public class ApiController {
 
         String access_token = tokenProvider.createToken(authentication);    // access token 자주 갱신되는 토큰 값(보안상 앞단에 노출이 되기 때문에 자주 갱신이된다)
         String refresh_token = tokenProvider.createRefreshToken();          // refresh token DB에 저장되는 토큰 값(긴시간동안 세션을 유지시키게 한다.)
-        String loginId = SecurityContextHolder.getContext().getAuthentication().getName();
+        String loginId = SecurityContextHolder.getContext().getAuthentication().getName(); // 암호화가 필요할 수 있다. -> 암호화 -> Spring 시큐리티
         //addTokenToCookie(response, jwt);
         HttpHeaders httpHeaders = new HttpHeaders();
         int refResult = 0;
@@ -120,6 +120,6 @@ public class ApiController {
     @PostMapping("/signup")	//ResponseEntity : http status 코드도 같이 리턴 할 수 있다.
     public ResponseEntity<UserDTO> signup(@RequestBody /* Json으로 받음 */ UserDTO userDto) throws Exception {
         //return ResponseEntity.ok(userService.signup(userDto));
-        return new ResponseEntity<UserDTO>(userService.signup(userDto), HttpStatus.CREATED);
+        return new ResponseEntity<>(userService.signup(userDto), HttpStatus.CREATED);
     }
 }

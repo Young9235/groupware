@@ -72,7 +72,7 @@ const Login = (props) => {
       setLoading(true);
       getToken(JWT_LOGIN, values)
         .then(() => {
-          alert('로그인 성공!');
+          // alert('로그인 성공!');
           navigate('/dashboard', { replace: true });
         })
         .catch((e) => {

@@ -33,7 +33,6 @@ import com.softleaf.groupware.service.UserService;
 @RequestMapping("/user")
 public class UserController {
 	
-	
 	@Autowired
 	private UserService userService;
 	
@@ -136,19 +135,16 @@ public class UserController {
 		+ ", rowsPerPage : " + search.getRowsPerPage()
 		+ ", schCodeName : " + search.getSchUserName());
 		
-		
+		// TODO 아래 코드 중복됨 알수없는 누군가
 		map.put("currentPage", search.getCurrentPage());
 		map.put("startNum", (search.getCurrentPage()-1)*search.getRowsPerPage());
 		map.put("pagingCount", search.getPagingCount());
 		map.put("rowsPerPage", search.getRowsPerPage());
 		map.put("userName", search.getSchUserName());
 		
-		
 		totalCount = userService.getUserListCnt(map);
 		
 		search.setTotalCount(totalCount, map);
-		
-		
 		
 		List<UserDTO> userList = userService.getUserList(map);
 		

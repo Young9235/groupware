@@ -36,7 +36,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 		}
 		// 암호화된 비밀번호를 리턴해야함.. DB에 암호화된 비번으로 등록이 되있어야함(4일을 해맴...) -> 현재는 암호화하지 않았기때문에 서버에서 암호화함
 		user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-		System.out.println("login id ==> " + user.getLoginId() + "  password ==> " + user.getPassword());
+		System.out.println("login id ==> " + user.getLoginId() + "  password ==> " + user.getPassword()); // TODO 플로우 확실히 잡으셔야할듯? 의문의 누군가 남김
 			  
 		List<GrantedAuthority> grantedAuthorities = user.getRoleList().stream()
 		          .map(authority -> new SimpleGrantedAuthority(user.getRoles()))

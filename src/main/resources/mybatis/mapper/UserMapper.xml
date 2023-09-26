@@ -181,9 +181,6 @@
   		limit #{startNum}, #{rowsPerPage}
 	</select>
   	
-  	
-  	
-  	
 	<select id="getUserInfo" resultType="com.softleaf.groupware.dto.UserDTO">
 		SELECT
 		   user_id,
@@ -198,7 +195,7 @@
 			user_info
 		WHERE
 			user_id = #{idx}
-				AND use_status = "Y"
+			AND use_status = "Y"
 	</select>
   	
   

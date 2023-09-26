@@ -264,7 +264,7 @@ const AuthList = () => {
                       color="primary"
                       className="btn me-2"
                       onClick={(e) => {
-                        navigate('/admin/auth/reg', { replace: true });
+                        navigate('reg');
                       }}
                     >
                       <i className="mdi mdi-plus-circle-outline me-1" />

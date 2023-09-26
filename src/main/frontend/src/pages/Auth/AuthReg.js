@@ -35,12 +35,12 @@ function AuthReg() {
   // 체크된 아이템을 담을 배열
   const [checkItems, setCheckItems] = useState([]);
 
-  useEffect(() => {
-    const userInfo = sessionStorage.getItem('authUser');
-    const id = JSON.parse(userInfo).idx;
-    // console.log("userId", id);
-    setUserId(id);
-  }, []);
+  // useEffect(() => {
+  //   const userInfo = sessionStorage.getItem('authUser');
+  //   const id = JSON.parse(userInfo).idx;
+  //   // console.log("userId", id);
+  //   setUserId(id);
+  // }, []);
 
   // 벨리데이션 처리
   const validation = useFormik({

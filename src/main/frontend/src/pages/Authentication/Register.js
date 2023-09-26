@@ -17,22 +17,21 @@ import * as Yup from 'yup';
 import { useFormik } from 'formik';
 
 // action
-import { registerUser } from '../../store/actions';
+import { registerUser, apiError } from 'src/store/actions';
 
 //redux
 import { useSelector, useDispatch } from 'react-redux';
 
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 // import images
-import profileImg from '../../assets/images/profile-img.png';
-import logoImg from '../../assets/images/logo.svg';
+import profileImg from 'src/assets/images/profile-img.png';
+import logoImg from 'src/assets/images/logo.svg';
 
 const Register = (props) => {
   //meta title
   document.title = 'Register | Skote - React Admin & Dashboard Template';
 
-  const history = useNavigate();
   const dispatch = useDispatch();
 
   const validation = useFormik({
@@ -40,33 +39,23 @@ const Register = (props) => {
     enableReinitialize: true,
 
     initialValues: {
-      loginId: '',
+      login_id: '',
       email: '',
-      userName: '',
-      userPassword: '',
-      userPasswordCheck: '',
-      userPhoneNum: '',
-      rollId: 2,
-      useStatus: 'Y',
+      username: '',
+      password: '',
+      password_confirm: '',
+      phone_num: '',
     },
     validationSchema: Yup.object({
-      loginId: Yup.string().required('아이디를 입력해주세요.'),
-      email: Yup.string()
-        .matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, '이메일 양식으로 등록바랍니다.')
-        .required('이메일을 입력해주세요.'),
-      userName: Yup.string().required('사용자 명을 입력해주세요.'),
-      userPassword: Yup.string().required('비밀번호를 입력해주세요.'),
-      userPasswordCheck: Yup.string()
-        .oneOf([Yup.ref('userPassword'), null], '비밀번호를 확인해주세요')
-        .required('비밀번호를 확인해주세요.'),
-      // userPasswordCheck: Yup.string().matches.required("비밀번호를 확인해주세요."),
-      userPhoneNum: Yup.string()
-        .matches(/^01([0|1|6|7|8|9])-?([0-9]{4})-?([0-9]{4})$/, '전화번호 양식으로 등록바랍니다.')
-        .required('전화번호를 입력해주세요.'),
+      login_id: Yup.string().required('Please Enter Your Id'),
+      username: Yup.string().required('Please Enter Your Username'),
+      password: Yup.string().required('Please Enter Your Password'),
+      password_confirm: Yup.string().required('Please Enter Your Password Confirm'),
+      email: Yup.string().required('Please Enter Your Email'),
+      phone_num: Yup.string().required('Please Enter Your Phone Number'),
     }),
     onSubmit: (values) => {
-      console.log('values >>>>>>>>>>>>>>>>', values);
-      dispatch(registerUser(values, history));
+      dispatch(registerUser(values));
     },
   });
 
@@ -77,7 +66,7 @@ const Register = (props) => {
   }));
 
   // useEffect(() => {
-  //   dispatch(apiError(''));
+  //   dispatch(apiError(""));
   // }, []);
 
   return (
@@ -96,8 +85,8 @@ const Register = (props) => {
                   <Row>
                     <Col className="col-7">
                       <div className="text-primary p-4">
-                        <h5 className="text-primary">회원가입</h5>
-                        <p>계정을 생성해주세요.</p>
+                        <h5 className="text-primary">Free Register</h5>
+                        <p>Get your free Skote account now.</p>
                       </div>
                     </Col>
                     <Col className="col-5 align-self-end">
@@ -124,253 +113,116 @@ const Register = (props) => {
                         return false;
                       }}
                     >
-                      {/* {user && user ? (
-                        <Alert color="success">
-                          Register User Successfully
-                        </Alert>
-                      ) : null} */}
+                      {user && user ? (
+                        <Alert color="success">Register User Successfully</Alert>
+                      ) : null}
 
                       {registrationError && registrationError ? (
                         <Alert color="danger">{registrationError}</Alert>
                       ) : null}
 
-                      <div className="row mb-4">
-                        <label className="col-sm-2 col-form-label" style={{ width: '80px' }}>
-                          <span style={{ color: 'red', marginRight: '3px' }}>*</span>아이디
-                        </label>
-                        <div className="col-sm-3">
-                          <Input
-                            name="loginId"
-                            className="form-control"
-                            placeholder="아이디를 입력해주세요."
-                            type="text"
-                            style={{ width: '250px', marginLeft: '35px' }}
-                            onChange={validation.handleChange}
-                            onBlur={validation.handleBlur}
-                            value={validation.values.loginId || ''}
-                            invalid={
-                              validation.touched.loginId && validation.errors.loginId ? true : false
-                            }
-                          />
-                          {validation.touched.loginId && validation.errors.loginId ? (
-                            <FormFeedback
-                              type="invalid"
-                              style={{ width: '150px', marginLeft: '35px' }}
-                            >
-                              {validation.errors.loginId}
-                            </FormFeedback>
-                          ) : null}
-                        </div>
+                      <div className="mb-3">
+                        <Label className="form-label">
+                          아이디 <span style={{ color: 'red' }}>*</span>
+                        </Label>
+                        <Input
+                          id="login_id"
+                          name="login_id"
+                          className="form-control"
+                          placeholder="Enter Your ID"
+                          type="email"
+                          onChange={validation.handleChange}
+                          onBlur={validation.handleBlur}
+                          value={validation.values.login_id || ''}
+                          invalid={!!(validation.touched.login_id && validation.errors.login_id)}
+                        />
+                        {validation.touched.login_id && validation.errors.login_id ? (
+                          <FormFeedback type="invalid">{validation.errors.login_id}</FormFeedback>
+                        ) : null}
                       </div>
 
-                      <div className="row mb-4" style={{ marginTop: '30px' }}>
-                        <label className="col-sm-2 col-form-label" style={{ width: '90px' }}>
-                          <span style={{ color: 'red', marginRight: '3px' }}>*</span>비밀번호
-                        </label>
-                        <div className="col-sm-3">
-                          <Input
-                            name="userPassword"
-                            className="form-control"
-                            placeholder="비밀번호를 입력해주세요."
-                            type="password"
-                            style={{ width: '250px', marginLeft: '25px' }}
-                            onChange={validation.handleChange}
-                            onBlur={validation.handleBlur}
-                            value={validation.values.userPassword || ''}
-                            invalid={
-                              validation.touched.userPassword && validation.errors.userPassword
-                                ? true
-                                : false
-                            }
-                          />
-                          {validation.touched.userPassword && validation.errors.userPassword ? (
-                            <FormFeedback
-                              type="invalid"
-                              style={{ width: '150px', marginLeft: '25px' }}
-                            >
-                              {validation.errors.userPassword}
-                            </FormFeedback>
-                          ) : null}
-                        </div>
+                      <div className="mb-3">
+                        <Label className="form-label">
+                          이름 <span style={{ color: 'red' }}>*</span>
+                        </Label>
+                        <Input
+                          name="username"
+                          type="text"
+                          placeholder="Enter username"
+                          onChange={validation.handleChange}
+                          onBlur={validation.handleBlur}
+                          value={validation.values.username || ''}
+                          invalid={!!(validation.touched.username && validation.errors.username)}
+                        />
+                        {validation.touched.username && validation.errors.username ? (
+                          <FormFeedback type="invalid">{validation.errors.username}</FormFeedback>
+                        ) : null}
+                      </div>
+                      <div className="mb-3">
+                        <Label className="form-label">
+                          비밀번호 <span style={{ color: 'red' }}>*</span>
+                        </Label>
+                        <Input
+                          name="password"
+                          type="password"
+                          placeholder="Enter Password"
+                          onChange={validation.handleChange}
+                          onBlur={validation.handleBlur}
+                          value={validation.values.password || ''}
+                          invalid={!!(validation.touched.password && validation.errors.password)}
+                        />
+                        {validation.touched.password && validation.errors.password ? (
+                          <FormFeedback type="invalid">{validation.errors.password}</FormFeedback>
+                        ) : null}
+                      </div>
+                      <div className="mb-3">
+                        <Label className="form-label">
+                          비밀번호 확인 <span style={{ color: 'red' }}>*</span>
+                        </Label>
+                        <Input
+                          name="password_confirm"
+                          type="password_confirm"
+                          placeholder="Enter Password confirm"
+                          onChange={validation.handleChange}
+                          onBlur={validation.handleBlur}
+                          value={validation.values.password_confirm || ''}
+                          invalid={
+                            !!(
+                              validation.touched.password_confirm &&
+                              validation.errors.password_confirm
+                            )
+                          }
+                        />
+                        {validation.touched.password_confirm &&
+                        validation.errors.password_confirm ? (
+                          <FormFeedback type="invalid">
+                            {validation.errors.password_confirm}
+                          </FormFeedback>
+                        ) : null}
                       </div>
 
-                      <div className="row mb-4" style={{ marginTop: '30px' }}>
-                        <label className="col-sm-2 col-form-label" style={{ width: '115px' }}>
-                          <span style={{ color: 'red', marginRight: '3px' }}>*</span>비밀번호 확인
-                        </label>
-                        <div className="col-sm-3">
-                          <Input
-                            name="userPasswordCheck"
-                            className="form-control"
-                            placeholder="비밀번호를 확인해주세요."
-                            type="password"
-                            style={{ width: '250px' }}
-                            onChange={validation.handleChange}
-                            onBlur={validation.handleBlur}
-                            value={validation.values.userPasswordCheck || ''}
-                            invalid={
-                              validation.touched.userPasswordCheck &&
-                              validation.errors.userPasswordCheck
-                                ? true
-                                : false
-                            }
-                          />
-                          {validation.touched.userPasswordCheck &&
-                          validation.errors.userPasswordCheck ? (
-                            <FormFeedback type="invalid" style={{ width: '200px' }}>
-                              {validation.errors.userPasswordCheck}
-                            </FormFeedback>
-                          ) : null}
-                        </div>
+                      <div className="mb-3">
+                        <Label className="form-label">
+                          이메일 <span style={{ color: 'red' }}>*</span>
+                        </Label>
+                        <Input
+                          id="email"
+                          name="email"
+                          className="form-control"
+                          placeholder="Enter email"
+                          type="email"
+                          onChange={validation.handleChange}
+                          onBlur={validation.handleBlur}
+                          value={validation.values.email || ''}
+                          invalid={!!(validation.touched.email && validation.errors.email)}
+                        />
+                        {validation.touched.email && validation.errors.email ? (
+                          <FormFeedback type="invalid">{validation.errors.email}</FormFeedback>
+                        ) : null}
                       </div>
 
-                      <div className="row mb-4" style={{ marginTop: '30px' }}>
-                        <label className="col-sm-2 col-form-label" style={{ width: '80px' }}>
-                          <span style={{ color: 'red', marginRight: '3px' }}>*</span>이름
-                        </label>
-                        <div className="col-sm-3">
-                          <Input
-                            name="userName"
-                            className="form-control"
-                            placeholder="이름을 입력해주세요."
-                            type="text"
-                            style={{ width: '250px', marginLeft: '35px' }}
-                            onChange={validation.handleChange}
-                            onBlur={validation.handleBlur}
-                            value={validation.values.userName || ''}
-                            invalid={
-                              validation.touched.userName && validation.errors.userName
-                                ? true
-                                : false
-                            }
-                          />
-                          {validation.touched.userName && validation.errors.userName ? (
-                            <FormFeedback
-                              type="invalid"
-                              style={{ width: '150px', marginLeft: '35px' }}
-                            >
-                              {validation.errors.userName}
-                            </FormFeedback>
-                          ) : null}
-                        </div>
-                      </div>
-
-                      <div className="row mb-4" style={{ marginTop: '30px' }}>
-                        <label className="col-sm-2 col-form-label" style={{ width: '80px' }}>
-                          <span style={{ color: 'red', marginRight: '3px' }}>*</span>이메일
-                        </label>
-                        <div className="col-sm-3">
-                          <Input
-                            name="email"
-                            className="form-control"
-                            placeholder="이메일을 입력해주세요."
-                            type="text"
-                            style={{ width: '250px', marginLeft: '35px' }}
-                            onChange={validation.handleChange}
-                            onBlur={validation.handleBlur}
-                            value={validation.values.email || ''}
-                            invalid={
-                              validation.touched.email && validation.errors.email ? true : false
-                            }
-                          />
-                          {validation.touched.email && validation.errors.email ? (
-                            <FormFeedback
-                              type="invalid"
-                              style={{ width: '150px', marginLeft: '35px' }}
-                            >
-                              {validation.errors.email}
-                            </FormFeedback>
-                          ) : null}
-                        </div>
-                      </div>
-                      <div className="row mb-4" style={{ marginTop: '30px' }}>
-                        <label className="col-sm-2 col-form-label" style={{ width: '90px' }}>
-                          <span style={{ color: 'red', marginRight: '3px' }}>*</span>전화번호
-                        </label>
-                        <div className="col-sm-3">
-                          <Input
-                            name="userPhoneNum"
-                            className="form-control"
-                            placeholder="전화번호를 입력해주세요."
-                            type="text"
-                            style={{ width: '250px', marginLeft: '25px' }}
-                            onChange={validation.handleChange}
-                            onBlur={validation.handleBlur}
-                            value={validation.values.userPhoneNum || ''}
-                            invalid={
-                              validation.touched.userPhoneNum && validation.errors.userPhoneNum
-                                ? true
-                                : false
-                            }
-                          />
-                          {validation.touched.userPhoneNum && validation.errors.userPhoneNum ? (
-                            <FormFeedback
-                              type="invalid"
-                              style={{ width: '150px', marginLeft: '25px' }}
-                            >
-                              {validation.errors.userPhoneNum}
-                            </FormFeedback>
-                          ) : null}
-                        </div>
-                      </div>
-                      <div className="row mb-3">
-                        <label
-                          htmlFor="radio"
-                          className="col-sm-2 col-form-label"
-                          style={{ width: '105px' }}
-                        >
-                          <span style={{ color: 'red', marginRight: '3px' }}>*</span>사용자 상태
-                        </label>
-                        <div className="col-sm-7" style={{ marginTop: '10px' }}>
-                          <Input
-                            type="radio"
-                            name="useStatus"
-                            style={{ marginLeft: '10px' }}
-                            // onChange={handleUseStatus}
-                            onChange={validation.handleChange}
-                            value="Y"
-                            defaultChecked
-                          />{' '}
-                          운영
-                          <Input
-                            type="radio"
-                            name="useStatus"
-                            // onChange={handleUseStatus}
-                            onChange={validation.handleChange}
-                            value="N"
-                            style={{ marginLeft: '20px' }}
-                          />{' '}
-                          미운영
-                        </div>
-                      </div>
-                      <div className="row mb-3">
-                        <label className="col-sm-2 col-form-label" style={{ width: '105px' }}>
-                          <span style={{ color: 'red', marginRight: '3px' }}>*</span>사용자 유형
-                        </label>
-                        <div className="col-sm-7" style={{ marginTop: '10px' }}>
-                          <Input
-                            type="radio"
-                            name="rollId"
-                            style={{ marginLeft: '10px' }}
-                            // onChange={handleRollId}
-                            onChange={validation.handleChange}
-                            value="1"
-                          />{' '}
-                          관리자
-                          <Input
-                            type="radio"
-                            name="rollId"
-                            // onChange={handleRollId}
-                            onChange={validation.handleChange}
-                            value="2"
-                            defaultChecked
-                            style={{ marginLeft: '20px' }}
-                          />{' '}
-                          사용자
-                        </div>
-                      </div>
-                      <div className="mt-3 d-grid">
-                        <button className="btn btn-info btn-block " type="submit">
+                      <div className="mt-4">
+                        <button className="col-12 btn btn-primary btn-block " type="submit">
                           회원가입
                         </button>
                       </div>
