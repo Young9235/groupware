@@ -28,7 +28,7 @@ https://velog.io/@miot2j/Spring-DB%EC%BB%A4%EB%84%A5%EC%85%98%ED%92%80%EA%B3%BC-
 
 ### 3. SMTP 메일인증
 
-### 4. react ui 관련 라이브러리
+### 4. React UI 관련 라이브러리
 - 웹/모바일 감지한 반응형 사이트 : react-device-detect
 - formik
   - form 관련 라이브러리 -> Form 상태를 다루기)
@@ -46,7 +46,7 @@ https://velog.io/@miot2j/Spring-DB%EC%BB%A4%EB%84%A5%EC%85%98%ED%92%80%EA%B3%BC-
 
 ## Backend
 #### 실행 방법 
-main controller : GroupwareApplication.java 파일 실행
+- main controller : GroupwareApplication.java 파일 실행
 
 #### 프로젝트 구조
 
