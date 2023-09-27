@@ -33,6 +33,7 @@ https://velog.io/@miot2j/Spring-DB%EC%BB%A4%EB%84%A5%EC%85%98%ED%92%80%EA%B3%BC-
 - https://green-bin.tistory.com/83
 - https://velog.io/@kjh950330/%ED%9A%8C%EC%9B%90%EA%B0%80%EC%9E%85-%EC%9D%B4%EB%A9%94%EC%9D%BC-%EC%9D%B8%EC%A6%9D-%EA%B8%B0%EB%8A%A5-%EA%B5%AC%ED%98%84
 - https://kimfk567.tistory.com/55
+- 앱비밀번호 softleaf123!@#
 
 ### 4. React UI 관련 라이브러리
 - 웹/모바일 감지한 반응형 사이트 : react-device-detect
