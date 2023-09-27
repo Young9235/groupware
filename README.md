@@ -51,38 +51,38 @@ https://velog.io/@miot2j/Spring-DB%EC%BB%A4%EB%84%A5%EC%85%98%ED%92%80%EA%B3%BC-
 - 아이콘 관련 : iconify https://icon-sets.iconify.design/
 
 ## Backend
-#### 실행 방법 
+### 1. 실행 방법 
 - main controller : GroupwareApplication.java 파일 실행
 
-#### 프로젝트 구조
+### 2. 프로젝트 구조
 
 ## Frontend
-#### 실행 방법 
+### 1. 실행 방법 
 - React를 사용하기 위한, nodejs 서버와 yarn설치가 필요함
 - Clone from GitHub
-  ````
-  git clone https://github.com/Young9235/groupware.git
-  ````
+````
+git clone https://github.com/Young9235/groupware.git
+````
 - 설정 된 모듈 설치(package.json)
-  ````
-  yarn 
-  ````
+````
+yarn 
+````
 - nodejs로 react 프로젝트 실행
-  ````    
-  yarn start
-  ````
+````    
+yarn start
+````
 - nodejs로 모듈 설치
-  ````
-  yarn add (모듈명)
-  ````
-  > 특정 버전 설치시 package.json 파일을 직접 수정 하는 것보다 커맨드로 입력하는 것이 좋다. ex) yarn add lamina@^1.0.6
+````
+yarn add (모듈명)
+````
+> 특정 버전 설치시 package.json 파일을 직접 수정 하는 것보다 커맨드로 입력하는 것이 좋다. ex) yarn add lamina@^1.0.6
   
-#### 프로젝트 구조
-#### 템플릿 정보
-#### ESLint 설정하기 
+### 2. 프로젝트 구조
+### 3. 템플릿 정보
+### 4. ESLint 설정하기 
 https://baeharam.netlify.app/posts/lint/Lint-ESLint-+-Prettier-%EC%84%A4%EC%A0%95%ED%95%98%EA%B8%B0
 > 코드 일관성 및 팀플 시 규칙을 준수하기 위함, 올바른 ES6문법 체크, 문법체크 설정을 on,off 할 수 있다.
-#### .prettierrc 파일 생성(코딩간편화)
+### 5. .prettierrc 파일 생성(코딩간편화)
 ```json
 {
   "singleQuote": true,
