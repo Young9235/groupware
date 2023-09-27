@@ -60,21 +60,21 @@ https://velog.io/@miot2j/Spring-DB%EC%BB%A4%EB%84%A5%EC%85%98%ED%92%80%EA%B3%BC-
 ### 1. 실행 방법 
 - React를 사용하기 위한, nodejs 서버와 yarn설치가 필요함
 - Clone from GitHub
-````
-git clone https://github.com/Young9235/groupware.git
-````
+  ````
+  git clone https://github.com/Young9235/groupware.git
+  ````
 - 설정 된 모듈 설치(package.json)
-````
-yarn 
-````
+  ````
+  yarn 
+  ````
 - nodejs로 react 프로젝트 실행
-````    
-yarn start
-````
+  ````    
+  yarn start
+  ````
 - nodejs로 모듈 설치
-````
-yarn add (모듈명)
-````
+  ````
+  yarn add (모듈명)
+  ````
 > 특정 버전 설치시 package.json 파일을 직접 수정 하는 것보다 커맨드로 입력하는 것이 좋다. ex) yarn add lamina@^1.0.6
   
 ### 2. 프로젝트 구조
