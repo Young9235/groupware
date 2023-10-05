@@ -4,6 +4,7 @@ export const POST_FAKE_REGISTER = 'user/insert';
 //LOGIN
 export const JWT_LOGIN = '/api/authenticate';
 export const JWT_REFRESH_LOGIN = '/api/refreshToken';
+export const SIGN_UP = '/api/sign-up';
 export const POST_FAKE_JWT_LOGIN = '/post-jwt-login';
 export const POST_FAKE_PASSWORD_FORGET = '/fake-forget-pwd';
 export const POST_FAKE_JWT_PASSWORD_FORGET = '/jwt-forget-pwd';

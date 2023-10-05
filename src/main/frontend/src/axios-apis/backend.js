@@ -1,6 +1,7 @@
 import axios from 'axios';
 import * as url from 'src/axios-apis/url';
 import { del, get, post, put } from 'src/axios-apis/api';
+import { SIGN_UP } from 'src/axios-apis/url';
 
 // Gets the logged in user data from local session
 
@@ -120,6 +121,7 @@ export const addNewUser = (user) => post(url.ADD_NEW_USER, user);
 export const getUserInfo = (param) => get(`${url.DETAIL_USER}/${param}`);
 export const updateUser = (id, params) => put(`${url.UPDATE_USER}/${id}`, params);
 export const deleteUser = (params) => del(url.DELETE_USER, params);
+export const signUp = (params) => post(url.SIGN_UP, params);
 
 // Menu
 export const getMenuList = (params) => get(url.GET_MENU_LIST, params);

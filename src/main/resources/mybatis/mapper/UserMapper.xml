@@ -31,20 +31,16 @@
 		group by A.user_id
 	</select>
 
-	<select id="getLoginCheck" resultType="com.softleaf.groupware.dto.UserDTO">
+	<!-- 가입 된 ID 체크 -->
+	<select id="getLoginCheck" resultType="Integer">
 		SELECT 
-		    COUNT(*) as cnt,
-		    user_name,
-		    login_id,
-		    email,
-		    user_password,
-		    user_id
+		    COUNT(*) as cnt
 		FROM
 		    user_info
 		WHERE
 		    login_id = #{loginId}
-		        AND user_password = #{userPassword}
-		        AND use_status = "Y"
+			AND use_status = "Y"
+		  	AND approv_yn = "Y"
 	</select>
 	
 	
@@ -57,7 +53,7 @@
 		</select>
 	
 	
-	  	<select id="getUserCheck" resultType="Integer">
+	<select id="getUserCheck" resultType="Integer">
 		SELECT 
 		    COUNT(*) as cnt
 		FROM
@@ -65,21 +61,18 @@
 		WHERE
 		    login_id = #{loginId}
 		     	AND use_status = "Y"
-	  </select>
-  	
+	</select>
 
 
   	<!-- 유저 등록  --> 
     <insert id="insertUser" useGeneratedKeys="true"  keyProperty="userId" parameterType="com.softleaf.groupware.dto.UserDTO" >
 		INSERT INTO user_info
 		(
-			login_id, 
-			email, 
-			user_password,  
+			login_id,
+			password,
 			user_name,  
-			user_phone_num,
-			roll_id,
-			use_status,
+			phone_num,
+			approv_yn,
 			create_id, 
 			create_date, 
 			update_id, 
@@ -88,21 +81,19 @@
 		VALUES
 		(
 			#{loginId},
-			#{email},
-			#{userPassword},
+			#{password},
 			#{userName},
-			#{userPhoneNum},
-			#{rollId},
-			#{useStatus},
-			0,
+			#{phoneNum},
+		 	#{approvYn},
+			#{userId},
             date_format(now(),'%Y-%m-%d %H:%i:%s'),
-			0,
+			#{userId},
             date_format(now(),'%Y-%m-%d %H:%i:%s')
 		)
+		<selectKey keyProperty="userId" resultType="Integer">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
     </insert>
-    
-    
-    
     
 	<update id="updateUser" parameterType="com.softleaf.groupware.dto.UserDTO">
 		UPDATE user_info
@@ -117,9 +108,6 @@
 		   </if>
 	   	   <if test="userName != null">
 		   ,user_name = #{userName}
-		   </if>
-   	   	   <if test="email != null">
-		   ,email = #{email}
 		   </if>
    	   	   <if test="userPhoneNum != null">
 		   ,user_phone_num = #{userPhoneNum}
@@ -159,7 +147,6 @@
 		    u.login_id,
 		    u.user_password,
 		    u.user_name,
-		    u.email,
 		    u.user_phone_num,
 		    u.use_status,
 		    u.delete_status,
@@ -183,19 +170,20 @@
   	
 	<select id="getUserInfo" resultType="com.softleaf.groupware.dto.UserDTO">
 		SELECT
-		   user_id,
-		   login_id,
-		   user_password,
-		   user_name,
-		   email,
-		   user_phone_num,
-		   use_status,
-		   roll_id
+		   A.user_id,
+		   A.login_id,
+		   A.password,
+		   A.user_name,
+		   A.phone_num,
+		   A.use_status,
+		   A.approv_yn,
+		   group_concat(B.auth_name) as roles
 		FROM
-			user_info
+			user_info A
+		left outer join member_auth_info B on A.user_id = B.user_id
 		WHERE
-			user_id = #{idx}
-			AND use_status = "Y"
+			A.user_id = #{userId}
+			AND A.use_status = "Y"
 	</select>
   	
   

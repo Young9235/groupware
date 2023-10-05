@@ -8,18 +8,14 @@ import java.util.List;
  * 회원 정보
  */
 public class UserDTO extends Default$Domain {
-	
-	
-	// 세션 Id
-	private int id;
-	
+
 	private int userId;
-    private String email;
     private String loginId;
     private String userName;
     private String password;
     private String phoneNum;
     private String useStatus;
+	private String approvYn;
 	private String refreshToken;
     private int createId;
     private String createDate;
@@ -43,12 +39,12 @@ public class UserDTO extends Default$Domain {
 		return new ArrayList<>();
 	}
 
-	public int getId() {
-		return id;
+	public String getApprovYn() {
+		return approvYn;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setApprovYn(String approvYn) {
+		this.approvYn = approvYn;
 	}
 
 	@Override
@@ -59,14 +55,6 @@ public class UserDTO extends Default$Domain {
 	@Override
 	public void setUserId(int userId) {
 		this.userId = userId;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
 	}
 
 	public String getLoginId() {

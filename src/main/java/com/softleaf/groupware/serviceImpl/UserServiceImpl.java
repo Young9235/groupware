@@ -7,7 +7,6 @@ import com.softleaf.groupware.dao.UserAuthMapper;
 import com.softleaf.groupware.dao.UserMapper;
 import com.softleaf.groupware.dto.UserDTO;
 import com.softleaf.groupware.exception.DuplicateMemberException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,33 +31,30 @@ public class UserServiceImpl implements UserService {
 
 	@Transactional
 	public UserDTO signup(UserDTO userDto) throws Exception {
-		// 저장
-		// 조회
-		UserDTO userVo = null;
-		HashMap<String, Object> map = new HashMap<>();
-		userVo = this.findByLoginId(userDto.getLoginId());
-		if (userVo != null) {
-			throw new DuplicateMemberException("중복된 아이디 입니다.");
+
+		int getLoginCheck = userMapper.getLoginCheck(userDto.getLoginId());
+		if (getLoginCheck > 0) {
+			throw new DuplicateMemberException("가입이 이미 완료 된 이메일입니다.");
 		}
 
-		map.put("username", userDto.getLoginId());
-		map.put("password", userDto.getPassword());
+		// 이쪽에서 메일(인증 코드)를 보내자!
+		UserDTO userVo = this.findByLoginId(userDto.getLoginId());
+		if (userVo == null) {
+			HashMap<String, Object> map = new HashMap<>();
+			userDto.setApprovYn("N");
+			this.insertUser(userDto);
 
-		this.insertUser(map);
-		userVo = this.findByLoginId(userDto.getLoginId());
+			map.put("userId", userDto.getUserId());
+			map.put("authName", "ROLE_USER");
 
-//		String seq = seqMapper.getSequenceInfo(authStr);
-//		seqMapper.updateSequenceInfo(authStr);
-
-		map.put("user_id", userVo.getUserId());
-		map.put("auth_name", "USER");
-
-		int suc = userAuthMapper.insertAuth(map);
-		if (suc <= 0) {
-			throw new Exception("error : 권한 정보가 저장 되지 않았습니다.");
+			int suc = userAuthMapper.insertAuth(map);
+			if (suc <= 0) {
+				throw new Exception("error : 권한 정보가 저장 되지 않았습니다.");
+			}
+			userVo = userMapper.getUserInfo(userDto);
 		}
 
-		return this.findByLoginId(userVo.getLoginId());
+		return userVo;
 	}
 
 	@Transactional(readOnly = true)
@@ -66,14 +62,6 @@ public class UserServiceImpl implements UserService {
 		return userMapper.findByLoginId(loginId);
 	}
 
-	@Transactional(readOnly = true)		
-	public UserDTO getLoginCheck(UserDTO user) throws Exception {
-		
-		System.out.println("userMapper.getUserCheck(user);" + userMapper.getUserCheck(user));
-		
-		return userMapper.getLoginCheck(user);
-	}
-	
 	@Transactional(readOnly = true)		
 	public int getUserCheck(UserDTO user) throws Exception {
 		
@@ -98,9 +86,10 @@ public class UserServiceImpl implements UserService {
 //		return result;
 //	}
 
+
 	@Transactional
-	public void insertUser(HashMap<String, Object> map) throws Exception {
-		int suc = userMapper.insertUser(map);
+	public void insertUser(UserDTO userDTO) throws Exception {
+		int suc = userMapper.insertUser(userDTO);
 		if(suc <= 0)
 			throw new IllegalArgumentException("USER 데이터베이스에 저장되지 않았습니다.");
 	}
@@ -143,11 +132,9 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Transactional(readOnly = true)
-	public UserDTO getUserInfo(HashMap<String, Object> map) throws Exception {
-		UserDTO user = userMapper.getUserInfo(map);
+	public UserDTO getUserInfo(UserDTO userDTO) throws Exception {
 //		user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-				
-		return user;
+		return userMapper.getUserInfo(userDTO);
 	}
 }
 	

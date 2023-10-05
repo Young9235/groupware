@@ -12,18 +12,18 @@ public interface UserMapper {
 	UserDTO findByLoginId(String username);
 	List<UserDTO> getUserList(HashMap<String, Object> map) throws Exception;
 	// 등록
-	int insertUser(HashMap<String, Object> map) throws Exception;
+	int insertUser(UserDTO user) throws Exception;
 	// 수정
 	int updateUser(UserDTO user);
 	// 삭제
 	int deleteUser(int id);
 	int insertAuth(HashMap<String, Object> map) throws Exception;
 	int getUserListCnt(HashMap<String, Object> map) throws Exception;
-	UserDTO getUserInfo(HashMap<String, Object> map) throws Exception;
+	UserDTO getUserInfo(UserDTO user) throws Exception;
 	int updateRefreshToken(HashMap<String, Object> map) throws Exception;
 	UserDTO getUserRenew(String refreshToken);
 	int getUserCheck(UserDTO user);
-	UserDTO getLoginCheck(UserDTO user);
+	int getLoginCheck(String loginId);
 	int deleteUser(HashMap<String, Object> map);
 	void insertAuthMapping(UserDTO user);
 

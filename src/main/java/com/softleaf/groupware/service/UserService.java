@@ -7,18 +7,15 @@ import com.softleaf.groupware.dto.UserDTO;
 
 public interface UserService {
 
-	UserDTO getLoginCheck(UserDTO user) throws Exception;
-
 	int getUserCheck(UserDTO user) throws Exception;
 
-	void insertUser(HashMap<String, Object> map) throws Exception;
+	void insertUser(UserDTO user) throws Exception;
 
 	int updateUser(UserDTO user);
 
-
 	List<UserDTO> getUserList(HashMap<String, Object> map) throws Exception;
 	
-	UserDTO getUserInfo(HashMap<String, Object> map) throws Exception;
+	UserDTO getUserInfo(UserDTO user) throws Exception;
 //	
 
 	int getUserListCnt(HashMap<String, Object> map) throws Exception;

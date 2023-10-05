@@ -72,7 +72,7 @@ public class SecurityConfig {
 						//.access("hasRole('ROLE_USER') or hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")	// 특정 권한 사용자에게만 열어줌
 						.permitAll()
 						// .antMatchers("/sf/**").authenticated()		// andMatchers에 속해있는 URL로 요청이 오면 인증이 필요하다고 설정한다.
-						.antMatchers("/login").permitAll()
+						.antMatchers("/test").permitAll()
 						// .antMatchers("/hello").permitAll()
 						.antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
 						.antMatchers("/user/**").access("hasRole('ROLE_USER')")

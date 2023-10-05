@@ -117,8 +117,15 @@ public class ApiController {
      * @return
      * @throws Exception
      */
-    @PostMapping("/signup")	//ResponseEntity : http status 코드도 같이 리턴 할 수 있다.
-    public ResponseEntity<UserDTO> signup(@RequestBody /* Json으로 받음 */ UserDTO userDto) throws Exception {
+    @PostMapping("/sign-up")	//ResponseEntity : http status 코드도 같이 리턴 할 수 있다.
+    public ResponseEntity<UserDTO> signUp(@RequestBody /* Json으로 받음 */ UserDTO userDto) throws Exception {
+        //return ResponseEntity.ok(userService.signup(userDto));
+
+        return new ResponseEntity<>(userService.signup(userDto), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/mail/dupCheck")
+    public ResponseEntity<UserDTO> dupCheck(@RequestBody /* Json으로 받음 */ UserDTO userDto) throws Exception {
         //return ResponseEntity.ok(userService.signup(userDto));
         return new ResponseEntity<>(userService.signup(userDto), HttpStatus.CREATED);
     }

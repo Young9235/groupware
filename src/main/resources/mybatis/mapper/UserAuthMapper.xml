@@ -24,15 +24,13 @@
 	</insert>
 
 	<insert id="insertAuth" parameterType="Map">
-		INSERT INTO tb_userauth_info
+		INSERT INTO member_auth_info
 		(
-			authId,
-			userId,
-			authName
+			user_id,
+			auth_name
 		)
 		VALUES
 		(
-			#{authId},
 			#{userId},
 			#{authName}
 		)

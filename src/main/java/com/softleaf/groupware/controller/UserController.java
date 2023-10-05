@@ -154,7 +154,6 @@ public class UserController {
 			JSONObject obj = new JSONObject();
 			obj.put("userId", user.getUserId());
 			obj.put("loginId", user.getLoginId());
-			obj.put("email", user.getEmail());
 			obj.put("userName", user.getUserName());
 			obj.put("userPhoneNum", user.getPhoneNum());
 			obj.put("createDate", user.getCreateDate());
@@ -178,15 +177,14 @@ public class UserController {
 	@GetMapping("/detail/{id}")	//ResponseEntity : http status 코드도 같이 리턴 할 수 있다.
 	public ResponseEntity<?> getUserInfo(@PathVariable int id) throws Exception {
 		System.out.println("id" + id);
-		HashMap<String, Object> map = new HashMap<>();
-		
+		UserDTO userDTO = new UserDTO();
 		if(id == 0) {
 			throw new Exception("param In id not Exits ");
 		} else {
-			map.put("idx", id);
+			userDTO.setUserId(id);
 		}
 		
-		return new ResponseEntity<>(userService.getUserInfo(map), HttpStatus.OK);
+		return new ResponseEntity<>(userService.getUserInfo(userDTO), HttpStatus.OK);
 	}
 	
 	

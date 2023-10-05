@@ -61,27 +61,30 @@ axiosApi.interceptors.response.use(
           resolve(axiosApi.request(config));
         }, 1000);
       });
-    } else if (error.response.status === 403) {
-      // alert('권한이 없습니다.');
-      window.location.href = '/notAvailable';
     } else {
-      if (
-        error.response.status === 401 ||
-        error.response.status === 500 ||
-        error.response.status === 404
-      ) {
-        // window.location.href = '/404';
-      } else {
-        // window.location.href = '/login';
+      // 에러 처리
+      switch (error.response.status) {
+        case 401:
+          // window.location.href = '/401';
+          break;
+        case 403:
+          // window.location.href = '/401';
+          break;
+        case 404:
+          window.location.href = '/404';
+          break;
+        case 500:
+          break;
+        default:
+          break;
       }
       console.log('error response => ', error.response);
       // console.log('error status => ', error.response.status);
       // console.log('error response => ', error.response);
       removeCookie('access_token');
       removeCookie('refresh_token');
-      // window.location.href = '/login';
+      return Promise.reject(error);
     }
-    return Promise.reject(error);
   }
 );
 
