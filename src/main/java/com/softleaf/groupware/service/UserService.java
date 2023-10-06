@@ -7,8 +7,6 @@ import com.softleaf.groupware.dto.UserDTO;
 
 public interface UserService {
 
-	int getUserCheck(UserDTO user) throws Exception;
-
 	void insertUser(UserDTO user) throws Exception;
 
 	int updateUser(UserDTO user);

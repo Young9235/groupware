@@ -61,6 +61,7 @@ const Register = (props) => {
       signUp(values)
         .then((response) => {
           console.log(response);
+          alert('가입을 환영합니다! ' + response.login_id + '님!');
           setLoading(false);
         })
         .catch((e) => {

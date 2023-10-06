@@ -43,31 +43,6 @@ public class UserController {
 		this.userService = userService;
 		this.authService = authService;
 	}
-
-	// 로그인 중복체크
-	@GetMapping("/check")	//ResponseEntity : http status 코드도 같이 리턴 할 수 있다.
-	public ResponseEntity<?> getUserCheck(UserDTO user) throws Exception {
-		System.out.println("user >>>>" + user.getLoginId());
-		
-		HashMap<String, Object> map = new HashMap<>();
-		
-		if(user.getLoginId() == null) {
-			throw new Exception("loginId In id not Exits ");
-		}
-		
-		int result = 0;
-		
-		if(user.getLoginId() == null || user.getLoginId() == "" || user.getLoginId().equals("")) result = 2;
-		else if (userService.getUserCheck(user) == 0) result = 0;
-		else if(userService.getUserCheck(user) == 1) result = 1;
-		
-		
-		
-		return new ResponseEntity<>(result, HttpStatus.OK);
-	}
-	
-	
-	
 	
 //    @PostMapping("/insert")
 //    public int insertUser(@RequestBody UserDTO user) throws Exception{

@@ -22,7 +22,6 @@ public interface UserMapper {
 	UserDTO getUserInfo(UserDTO user) throws Exception;
 	int updateRefreshToken(HashMap<String, Object> map) throws Exception;
 	UserDTO getUserRenew(String refreshToken);
-	int getUserCheck(UserDTO user);
 	int getLoginCheck(String loginId);
 	int deleteUser(HashMap<String, Object> map);
 	void insertAuthMapping(UserDTO user);

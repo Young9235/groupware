@@ -172,7 +172,6 @@
 		SELECT
 		   A.user_id,
 		   A.login_id,
-		   A.password,
 		   A.user_name,
 		   A.phone_num,
 		   A.use_status,

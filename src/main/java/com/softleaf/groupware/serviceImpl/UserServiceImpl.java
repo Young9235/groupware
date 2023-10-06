@@ -37,7 +37,8 @@ public class UserServiceImpl implements UserService {
 			throw new DuplicateMemberException("가입이 이미 완료 된 이메일입니다.");
 		}
 
-		// 이쪽에서 메일(인증 코드)를 보내자!
+		// 이쪽에서 메일(인증 코드)를 보내자! -> 저장은 메일 인증을 한 후 저장하는걸로?
+
 		UserDTO userVo = this.findByLoginId(userDto.getLoginId());
 		if (userVo == null) {
 			HashMap<String, Object> map = new HashMap<>();
@@ -62,13 +63,6 @@ public class UserServiceImpl implements UserService {
 		return userMapper.findByLoginId(loginId);
 	}
 
-	@Transactional(readOnly = true)		
-	public int getUserCheck(UserDTO user) throws Exception {
-		
-		System.out.println("userMapper.getUserCheck(user);" + userMapper.getUserCheck(user));
-		
-		return userMapper.getUserCheck(user);
-	}
 
 //	@Transactional
 //	public int insertUser(UserDTO user) {
