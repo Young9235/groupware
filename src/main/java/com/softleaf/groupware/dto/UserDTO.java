@@ -22,6 +22,8 @@ public class UserDTO extends Default$Domain {
     private int updateId;
     private String updateDate;
 	private String roles;
+	private String mailKey;
+
 	private int cnt;
     
     // 조인 확장
@@ -175,5 +177,13 @@ public class UserDTO extends Default$Domain {
 
 	public void setUserIdList(ArrayList<String> userIdList) {
 		this.userIdList = userIdList;
+	}
+
+	public String getMailKey() {
+		return mailKey;
+	}
+
+	public void setMailKey(String mailKey) {
+		this.mailKey = mailKey;
 	}
 }

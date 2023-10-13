@@ -11,6 +11,8 @@
 		FROM user_info A
 	 	left outer join member_auth_info B on A.user_id = B.user_id
 		where A.login_id = #{loginId}
+		AND A.use_status = "Y"
+		AND A.approv_yn = "Y"
 		group by A.user_id
 	</select>
 
@@ -37,34 +39,40 @@
 		    COUNT(*) as cnt
 		FROM
 		    user_info
-		WHERE
-		    login_id = #{loginId}
-			AND use_status = "Y"
-		  	AND approv_yn = "Y"
+		WHERE login_id = #{loginId}
+		 AND use_status = "Y"
+		 <if test='approvYn != null and approvYn != ""'>
+			AND approv_yn = #{approvYn}
+		 </if>
 	</select>
-	
-	
-		<select id="getUserListCnt" resultType="Integer">
+
+	<!-- 메일 인증 시, 키 값 등록 -->
+	<update id="createAuthKey" parameterType="Map">
+		UPDATE user_info
+		SET mail_key = #{mailKey}
+		WHERE login_id = #{loginId}
+		  AND approv_yn = "N" -- 인증을 받아야되는 계정을 조회
+	</update>
+
+	<!-- 회원가입 최종 완료 -->
+	<update id="deleteAuthKay" parameterType="Map">
+		UPDATE user_info
+		SET mail_key = null,
+		    user_id = #{userId},
+		    update_date = date_format(now(),'%Y-%m-%d %H:%i:%s'),
+			approv_yn = "Y"
+		WHERE login_id = #{loginId}
+	</update>
+
+	<select id="getUserListCnt" resultType="Integer">
 		SELECT COUNT(*) FROM user_info
 		where 1=1 AND use_status = "Y"
 		<if test='userName != null and userName != ""'>
 			and user_name like concat('%', #{userName}, '%')
 		</if> 
-		</select>
-	
-	
-	<select id="getUserCheck" resultType="Integer">
-		SELECT 
-		    COUNT(*) as cnt
-		FROM
-		    user_info
-		WHERE
-		    login_id = #{loginId}
-		     	AND use_status = "Y"
 	</select>
 
-
-  	<!-- 유저 등록  --> 
+  	<!-- 회원 등록(초기 가입 시)  -->
     <insert id="insertUser" useGeneratedKeys="true"  keyProperty="userId" parameterType="com.softleaf.groupware.dto.UserDTO" >
 		INSERT INTO user_info
 		(
@@ -94,31 +102,27 @@
 			SELECT LAST_INSERT_ID()
 		</selectKey>
     </insert>
-    
+
 	<update id="updateUser" parameterType="com.softleaf.groupware.dto.UserDTO">
 		UPDATE user_info
-		   SET 
-		   update_date = date_format(now(),'%Y-%m-%d %H:%i:%s')
-		   ,update_id = #{updateId}
-		   <if test="loginId != null">
-		   ,login_id = #{loginId}
-		   </if>
-   	   	   <if test="userPassword != null">
-		   ,user_password = #{userPassword}
-		   </if>
-	   	   <if test="userName != null">
-		   ,user_name = #{userName}
-		   </if>
-   	   	   <if test="userPhoneNum != null">
-		   ,user_phone_num = #{userPhoneNum}
-		   </if>
-  	   	   <if test="useStatus != null">
-		   ,use_status = #{useStatus}
-		   </if>
-   	   	   <if test="rollId != 0">
-		   ,roll_id = #{rollId}
-		   </if>
-		   WHERE 
+		   SET update_date = date_format(now(),'%Y-%m-%d %H:%i:%s')
+				,update_id = #{userId}
+			<if test="loginId != null">
+				,login_id = #{loginId}
+			</if>
+			<if test="password != null">
+				,password = #{password}
+			</if>
+			<if test="userName != null">
+				,user_name = #{userName}
+			</if>
+			<if test="phoneNum != null">
+				,phone_num = #{phoneNum}
+			</if>
+			<if test="useStatus != null">
+				,use_status = #{useStatus}
+			</if>
+		   WHERE
 		   	 user_id = #{userId}
 	</update>
 
@@ -167,7 +171,8 @@
 		order by user_id desc
   		limit #{startNum}, #{rowsPerPage}
 	</select>
-  	
+
+	<!-- 유저 정보 조회 -->
 	<select id="getUserInfo" resultType="com.softleaf.groupware.dto.UserDTO">
 		SELECT
 		   A.user_id,
@@ -176,14 +181,24 @@
 		   A.phone_num,
 		   A.use_status,
 		   A.approv_yn,
+		   A.mail_key,
 		   group_concat(B.auth_name) as roles
 		FROM
 			user_info A
 		left outer join member_auth_info B on A.user_id = B.user_id
 		WHERE
-			A.user_id = #{userId}
-			AND A.use_status = "Y"
+			A.use_status = "Y"
+		<choose>
+			<when test='loginId != null and loginId != ""'>
+				AND A.login_id = #{loginId}
+				<if test='pageMode == "AUTH_LOGIN" and password != null'>
+					AND A.password = #{password}
+				</if>
+			</when>
+			<otherwise>
+				AND A.user_id = #{userId}
+			</otherwise>
+		</choose>
 	</select>
-  	
   
 </mapper>

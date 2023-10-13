@@ -1,7 +1,6 @@
 import axios from 'axios';
 import * as url from 'src/axios-apis/url';
 import { del, get, post, put } from 'src/axios-apis/api';
-import { SIGN_UP } from 'src/axios-apis/url';
 
 // Gets the logged in user data from local session
 
@@ -139,6 +138,7 @@ export const deleteCodeList = (params) => del(url.DELETE_CODE_LIST, params);
 
 // AUTH
 export const getAuthList = (params) => get(url.GET_AUTH_LIST, params);
+export const sendAuthMailConfirm = (params) => post(url.SEND_AUTH_MAIL_CONFIRM, params);
 export const getAuthInfo = (reqParam) => get(`${url.GET_AUTH_DETAIL}/${reqParam}`);
 export const insertAuth = (params) => post(url.INSERT_AUTH_INFO, params);
 export const updateAuth = (reqParam, params) => put(`${url.UPDATE_AUTH_INFO}/${reqParam}`, params);

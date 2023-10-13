@@ -14,10 +14,9 @@ public class Constants
 	public static final int LOGIN_PASSWD_ERROR			= 2;	// 패스워드 오류	
 	public static final int PERMISSION_GRANT_ERROR		= 3;	// 권한 설정 에러, 권한 및 메뉴에 대한 설정 오류
 	public static final int LOGIN_FAIL_ALREADY			= -99;	// 이미 로그인 되어 있는 계정
-	
-	
-	
-	
+
+	public static final String FRONT_SERVER_ADDR = "http://localhost:3300";
+
 	public static final int PAGING_COUNT				= 10;	// 페이징 시 보여지는 숫자
 	public static final int PAGING_COUNT_STAT			= 100;	// 페이징 시 보여지는 숫자 통계페이지용
 	public static final int RECORD_COUNT				= 10;	// 한 페이지에서 보여지는 레코드 수

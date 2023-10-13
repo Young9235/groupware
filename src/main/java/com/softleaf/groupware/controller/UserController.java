@@ -44,12 +44,12 @@ public class UserController {
 		this.authService = authService;
 	}
 	
-//    @PostMapping("/insert")
-//    public int insertUser(@RequestBody UserDTO user) throws Exception{
-//
-//    	// 이메일 중복 확인
+    @PostMapping("/insert")
+    public ResponseEntity<?> insertUser(@RequestBody UserDTO user) throws Exception{
+
+    	// 이메일 중복 확인
 //    	int check = userService.getUserCheck(user);
-//
+
 //    	int result = 0;
 //    	try {
 //    		if (check < 1) {
@@ -61,11 +61,10 @@ public class UserController {
 //		} catch (Exception e) {
 //			System.out.println(e);
 //		}
-//
-//
-//    	System.out.println("result >>>>>>>>>>>>>>>" + result);
-//    	return result;
-//    }
+		int res = userService.insertUser(user);
+
+		return new ResponseEntity<>("작업 중", HttpStatus.OK);	// user데이터와 HttpStatus상태 코드도 같이 리턴한다.
+    }
     
     
 //	// 수정하기
@@ -166,9 +165,8 @@ public class UserController {
 	// 수정하기
 	@PutMapping("/update/{id}")	
 	public ResponseEntity<?> updateUser(@PathVariable int id, @RequestBody UserDTO user) throws Exception {
-		HashMap<String, Object> map = new HashMap<>();
-		
-		
+		HashMap<String, Object> response = new HashMap<>();
+
 		System.out.println("user >>>>" + user.getPassword());
 		
 		if(id == 0) {
@@ -178,7 +176,6 @@ public class UserController {
 			user.setUpdateId(id);
 //			map.put("idx", id);
 		}
-		
 		return new ResponseEntity<>(userService.updateUser(user), HttpStatus.OK);
 	}
 	

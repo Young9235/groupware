@@ -22,7 +22,7 @@ import logo from 'src/assets/images/logo.svg';
 import Loader from 'src/components/Common/Loader';
 import { getCookie, removeCookie, setCookie } from 'src/common/cookie';
 import { JWT_LOGIN } from 'src/axios-apis/url';
-import { getToken } from 'src/axios-apis/api';
+import { getAuthenticate } from 'src/axios-apis/api';
 import { useSelector } from 'react-redux';
 
 const Login = (props) => {
@@ -61,19 +61,27 @@ const Login = (props) => {
     }),
     onSubmit: (values) => {
       setLoading(true);
-      getToken(JWT_LOGIN, values)
-        .then(() => {
-          // alert('로그인 성공!');
-          navigate('/dashboard', { replace: true });
-          if (isChecked) {
-            setCookie('login_id', values.login_id);
+      getAuthenticate(JWT_LOGIN, values)
+        .then((resData) => {
+          if (resData.status === 'success') {
+            // alert('로그인 성공!');
+            if (isChecked) {
+              setCookie('login_id', values.login_id);
+            } else {
+              removeCookie('login_id');
+            }
+            navigate('/dashboard', { replace: true }); // replace true 뒤로가기 불가, false 뒤로가기 가능(default)
+          } else if (resData.status === 'authFail') {
+            navigate('/auth-email-verification', {
+              state: { email: values.login_id, type: 'Login' },
+            });
           } else {
-            removeCookie('login_id');
+            setError('로그인 실패');
           }
         })
         .catch((e) => {
           // alert('로그인 실패');
-          setError('로그인 실패');
+          setError('아이디와 비밀번호를 잘 못 입력하였거나, 존재하지 않는 계정입니다.');
           console.log(e.message);
         });
       setLoading(false);

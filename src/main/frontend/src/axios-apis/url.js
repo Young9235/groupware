@@ -62,3 +62,5 @@ export const GET_AUTH_DETAIL = '/admin/auth/detail';
 export const INSERT_AUTH_INFO = '/admin/auth/insert';
 export const UPDATE_AUTH_INFO = '/admin/auth/update';
 export const DELETE_AUTH_LIST = '/admin/auth/delete';
+
+export const SEND_AUTH_MAIL_CONFIRM = '/api/emails/auth-email-confirm';

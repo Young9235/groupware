@@ -88,22 +88,22 @@ axiosApi.interceptors.response.use(
   }
 );
 
-export async function getToken(url, data, config = {}) {
+export async function getAuthenticate(url, data, config = {}) {
   return axios.post(url, { ...data }, { ...config }).then((response) => {
     // console.log(response.data);
-    const getAuth = JSON.parse(JSON.stringify(response.data));
-    const access_token = getAuth.access_token;
-    const refresh_token = getAuth.refresh_token;
-    axiosApi.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
-    axiosApi.defaults.headers.common['Auth-Refresh-Token'] = `${refresh_token}`;
-    // removeCookie('refresh_token');
-    if (refresh_token && access_token) {
-      setCookie('refresh_token', refresh_token);
-      setCookie('access_token', access_token);
-    } else {
-      console.log('refresh_token underfined');
-      return false;
+    const resultData = JSON.parse(JSON.stringify(response.data));
+    if (resultData.status === 'success') {
+      const access_token = resultData.access_token;
+      const refresh_token = resultData.refresh_token;
+      axiosApi.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
+      axiosApi.defaults.headers.common['Auth-Refresh-Token'] = `${refresh_token}`;
+      // removeCookie('refresh_token');
+      if (refresh_token && access_token) {
+        setCookie('refresh_token', refresh_token);
+        setCookie('access_token', access_token);
+      }
     }
+    return resultData;
   });
 }
 

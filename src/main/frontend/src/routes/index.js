@@ -5,11 +5,11 @@ import { Navigate } from 'react-router-dom';
 import UserProfile from 'src/pages/Authentication/user-profile';
 
 // Authentication related pages
-import Login from '../pages/Authentication/Login';
-import Logout from '../pages/Authentication/Logout';
-import Register from '../pages/Authentication/Register';
-import ForgetPwd from '../pages/Authentication/ForgetPassword';
-import ContactsList from '../pages/Contacts/ContactList/contacts-list';
+import Login from 'src/pages/Authentication/Login';
+import Logout from 'src/pages/Authentication/Logout';
+import Register from 'src/pages/Authentication/Register';
+import ForgetPwd from 'src/pages/Authentication/ForgetPassword';
+import ContactsList from 'src/pages/Contacts/ContactList/contacts-list';
 
 // Dashboard
 import Dashboard from 'src/pages/Dashboard/index';
@@ -20,6 +20,8 @@ import Menu from 'src/pages/Menu';
 import Boards from 'src/pages/Boards';
 import Auths from 'src/pages/Auth';
 import Monitoring from 'src/pages/Monitoring';
+import EmailVerification from 'src/pages/Authentication/EmailVerification';
+import EmailAuthConfirm from 'src/pages/Authentication/EmailAuthConfirm';
 
 // 로그인 한(인증O) 사람에게 보일 페이지 메뉴
 const authProtectedRoutes = [
@@ -52,6 +54,8 @@ const publicRoutes = [
   { path: '/login', component: <Login /> },
   { path: '/forgot-password', component: <ForgetPwd /> },
   { path: '/register', component: <Register /> },
+  { path: '/auth-email-verification', component: <EmailVerification /> },
+  { path: '/auth-email-confirm/:email/:key', component: <EmailAuthConfirm /> },
 ];
 
 export { authProtectedRoutes, publicRoutes };

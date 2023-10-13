@@ -14,7 +14,7 @@ public interface UserMapper {
 	// 등록
 	int insertUser(UserDTO user) throws Exception;
 	// 수정
-	int updateUser(UserDTO user);
+	int updateUser(UserDTO user) throws Exception;
 	// 삭제
 	int deleteUser(int id);
 	int insertAuth(HashMap<String, Object> map) throws Exception;
@@ -22,9 +22,12 @@ public interface UserMapper {
 	UserDTO getUserInfo(UserDTO user) throws Exception;
 	int updateRefreshToken(HashMap<String, Object> map) throws Exception;
 	UserDTO getUserRenew(String refreshToken);
-	int getLoginCheck(String loginId);
+	int getLoginCheck(HashMap<String, Object> map);
 	int deleteUser(HashMap<String, Object> map);
 	void insertAuthMapping(UserDTO user);
+	int createAuthKey(HashMap<String, Object> map) throws Exception;
+
+	int deleteAuthKay(HashMap<String, Object> map) throws Exception;
 
 
 }

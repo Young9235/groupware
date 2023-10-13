@@ -16,7 +16,7 @@ import {
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 // import images
 import profileImg from 'src/assets/images/profile-img.png';
@@ -31,6 +31,7 @@ const Register = (props) => {
   // console.log('register');
   const [loading, setLoading] = useState(false);
   const [errMsg, setErrMsg] = useState('');
+  const navigate = useNavigate();
   const validation = useFormik({
     // enableReinitialize : use this flag when initial values needs to be changed
     enableReinitialize: true,
@@ -61,7 +62,9 @@ const Register = (props) => {
       signUp(values)
         .then((response) => {
           console.log(response);
-          alert('가입을 환영합니다! ' + response.login_id + '님!');
+          navigate('/auth-email-verification', {
+            state: { email: values.login_id, type: 'Register' },
+          });
           setLoading(false);
         })
         .catch((e) => {
@@ -106,13 +109,11 @@ const Register = (props) => {
                 </div>
                 <CardBody className="pt-0">
                   <div>
-                    <Link to="/">
-                      <div className="avatar-md profile-user-wid mb-3">
-                        <span className="avatar-title rounded-circle bg-light">
-                          <img src={logoImg} alt="" className="rounded-circle" height="34" />
-                        </span>
-                      </div>
-                    </Link>
+                    <div className="avatar-md profile-user-wid mb-3">
+                      <span className="avatar-title rounded-circle bg-light">
+                        <img src={logoImg} alt="" className="rounded-circle" height="34" />
+                      </span>
+                    </div>
                   </div>
                   <div className="p-2">
                     <Form
@@ -150,6 +151,7 @@ const Register = (props) => {
                           onChange={validation.handleChange}
                           onBlur={validation.handleBlur}
                           value={validation.values.login_id || ''}
+                          disabled={loading}
                           invalid={!!(validation.touched.login_id && validation.errors.login_id)}
                         />
                         {validation.touched.login_id && validation.errors.login_id ? (
@@ -168,6 +170,7 @@ const Register = (props) => {
                           onChange={validation.handleChange}
                           onBlur={validation.handleBlur}
                           value={validation.values.user_name || ''}
+                          disabled={loading}
                           invalid={!!(validation.touched.user_name && validation.errors.user_name)}
                         />
                         {validation.touched.user_name && validation.errors.user_name ? (
@@ -185,6 +188,7 @@ const Register = (props) => {
                           onChange={validation.handleChange}
                           onBlur={validation.handleBlur}
                           value={validation.values.password || ''}
+                          disabled={loading}
                           invalid={!!(validation.touched.password && validation.errors.password)}
                         />
                         {validation.touched.password && validation.errors.password ? (
@@ -202,6 +206,7 @@ const Register = (props) => {
                           onChange={validation.handleChange}
                           onBlur={validation.handleBlur}
                           value={validation.values.password_confirm || ''}
+                          disabled={loading}
                           invalid={
                             !!(
                               validation.touched.password_confirm &&
@@ -228,6 +233,7 @@ const Register = (props) => {
                           onChange={validation.handleChange}
                           onBlur={validation.handleBlur}
                           value={validation.values.phone_num || ''}
+                          disabled={loading}
                           invalid={!!(validation.touched.phone_num && validation.errors.phone_num)}
                         />
                         {validation.touched.phone_num && validation.errors.phone_num ? (
@@ -236,7 +242,11 @@ const Register = (props) => {
                       </div>
 
                       <div className="mt-4">
-                        <button className="col-12 btn btn-primary btn-block " type="submit">
+                        <button
+                          className="col-12 btn btn-primary btn-block "
+                          type="submit"
+                          disabled={loading}
+                        >
                           {loading ? (
                             <i className="bx bx-loader bx-spin font-size-16 align-middle me-2"></i>
                           ) : (
@@ -248,7 +258,11 @@ const Register = (props) => {
                       <div className="mt-4 text-center">
                         <p className="mb-0">
                           By registering you agree to the Skote{' '}
-                          <Link to="#" className="text-primary">
+                          <Link
+                            to="#"
+                            className="text-primary"
+                            style={loading ? { pointerEvents: 'none' } : null}
+                          >
                             Terms of Use
                           </Link>
                         </p>
@@ -260,7 +274,11 @@ const Register = (props) => {
               <div className="mt-5 text-center">
                 <p>
                   Already have an account ?{' '}
-                  <Link to="/login" className="font-weight-medium text-primary">
+                  <Link
+                    to="/login"
+                    className="font-weight-medium text-primary"
+                    style={loading ? { pointerEvents: 'none' } : null}
+                  >
                     {' '}
                     Login
                   </Link>{' '}
