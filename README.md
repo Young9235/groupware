@@ -93,3 +93,9 @@ https://baeharam.netlify.app/posts/lint/Lint-ESLint-+-Prettier-%EC%84%A4%EC%A0%9
   "printWidth": 80
 }
 ```
+
+## mysql Dump 파일
+- 해당 dump 파일 로컬 서버에 임포트하여 db 생성 할것, 최신 날짜명으로 실행 할 것
+````
+D:\study-groupware\groupware\Dump2023~~.sql
+````
