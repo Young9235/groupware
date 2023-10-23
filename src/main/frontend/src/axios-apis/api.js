@@ -66,9 +66,13 @@ axiosApi.interceptors.response.use(
       switch (error.response.status) {
         case 401:
           // window.location.href = '/401';
+          removeCookie('access_token');
+          removeCookie('refresh_token');
           break;
         case 403:
           // window.location.href = '/401';
+          removeCookie('access_token');
+          removeCookie('refresh_token');
           break;
         case 404:
           window.location.href = '/404';
@@ -81,8 +85,8 @@ axiosApi.interceptors.response.use(
       console.log('error response => ', error.response);
       // console.log('error status => ', error.response.status);
       // console.log('error response => ', error.response);
-      removeCookie('access_token');
-      removeCookie('refresh_token');
+      // removeCookie('access_token');
+      // removeCookie('refresh_token');
       return Promise.reject(error);
     }
   }

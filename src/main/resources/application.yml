@@ -42,6 +42,10 @@ spring:
       password: 1234
   jackson:
     property-naming-strategy: SNAKE_CASE  # Request-body, json 타입클래스를 snake case KEY값을 camel case로 파싱
+  batch:
+    initialize-schema: always	# batch 스키마 자동 생성
+    job:
+      enabled: false			# 시작과 동시에 실행되는건 방지
 
   mail:
     host: smtp.gmail.com

@@ -43,6 +43,10 @@ dependencies {
 	// implementation "javax.mail:javax.mail-api:1.6.2"
 	implementation group: 'com.sun.mail', name: 'javax.mail', version: '1.6.2'
 
+	implementation 'org.springframework.boot:spring-boot-starter-batch'
+	implementation 'org.springframework.boot:spring-boot-starter-quartz'
+	testImplementation 'org.springframework.batch:spring-batch-test'
+
 	// @ConfigurationProperties 어노테이션 함수를 사용하기 위함 : yml 파일에 설정한 것을 인식할 수 있다.
 	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 	

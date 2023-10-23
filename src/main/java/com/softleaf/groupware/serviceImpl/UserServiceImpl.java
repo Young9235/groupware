@@ -1,5 +1,6 @@
 package com.softleaf.groupware.serviceImpl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -52,13 +53,13 @@ public class UserServiceImpl implements UserService {
 				userDto.setApprovYn("N");
 				this.insertUser(userDto);
 
-				map.put("userId", userDto.getUserId());
-				map.put("authName", "ROLE_USER");
-
-				int suc = userAuthMapper.insertAuth(map);
-				if (suc <= 0) {
-					throw new Exception("error : 권한 정보가 저장 되지 않았습니다.");
-				}
+//				map.put("userId", userDto.getUserId());
+//				map.put("authName", "ROLE_USER");
+//
+//				int suc = userAuthMapper.insertAuth(map);
+//				if (suc <= 0) {
+//					throw new Exception("error : 권한 정보가 저장 되지 않았습니다.");
+//				}
 			} else {
 				userDto.setUserId(userVo.getUserId());
 				this.updateUser(userDto);
@@ -83,8 +84,18 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Transactional
-	public int deleteAuthKay(HashMap<String, Object> map) throws Exception {
-		return userMapper.deleteAuthKay(map);
+	public int confirmAuthKay(HashMap<String, Object> map) throws Exception {
+		int suc = userAuthMapper.insertAuth(map);
+		if (suc <= 0) {
+			throw new Exception("error : 권한 정보가 저장 되지 않았습니다.");
+		}
+
+		suc = userMapper.deleteAuthKay(map);
+		if (suc <= 0) {
+			throw new Exception("error : 유저정보 삭제 처리가 되지 않았습니다.");
+		}
+
+		return suc;
 	}
 
 
@@ -142,9 +153,15 @@ public class UserServiceImpl implements UserService {
 		return userMapper.getUserRenew(refreshToken);
 	}
 
+	/**
+	 * 1시간 지날때까지 인증 안한 회원 조회
+	 * @param map -
+	 * @return ArrayList
+	 * @throws Exception -
+	 */
 	@Transactional(readOnly = true)
-	public int getUserListCnt(HashMap<String, Object> map) throws Exception {
-		return userMapper.getUserListCnt(map);
+	public ArrayList<Integer> getAuthNotUserIdList(HashMap<String, Object> map) throws Exception {
+		return userMapper.getAuthNotUserIdList(map);
 	}
 	
 	// 유저 리스트
@@ -157,6 +174,22 @@ public class UserServiceImpl implements UserService {
 	public UserDTO getUserInfo(UserDTO userDTO) throws Exception {
 //		user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
 		return userMapper.getUserInfo(userDTO);
+	}
+
+	/**
+	 * 인증 안한 회원 삭제
+	 * @param map -
+	 * @return Integer
+	 * @throws Exception -
+	 */
+	@Transactional
+	public int deleteAuthUser(HashMap<String, Object> map) throws Exception {
+		return userMapper.deleteAuthUser(map);
+	}
+
+	@Transactional(readOnly = true)
+	public int getUserCnt(HashMap<String, Object> map) throws Exception {
+		return userMapper.getUserCnt(map);
 	}
 }
 	

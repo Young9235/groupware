@@ -166,8 +166,9 @@ public class ApiController {
                 HashMap<String,Object> map = new HashMap<>();
                 map.put("loginId", userDTO.getLoginId());
                 map.put("userId", user.getUserId());
+                map.put("authName", "ROLE_USER");   // 사용자 정보로 인증 권한 삽입
 
-                int sucFlg = userService.deleteAuthKay(map);    // 인증 키 삭제
+                int sucFlg = userService.confirmAuthKay(map);    // 인증 키 삭제
                 if(sucFlg > 0) {
                     status = HttpStatus.OK;
                     response.put("status", "success");

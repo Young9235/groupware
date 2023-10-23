@@ -16,6 +16,11 @@
 		group by A.user_id
 	</select>
 
+	<select id="getUserCnt" resultType="Integer">
+		SELECT COUNT(*)
+		FROM user_info A
+	</select>
+
 	<!-- 리프레시 토큰 업데이트 -->
 	<update id="updateRefreshToken" parameterType="Map">
 		UPDATE user_info
@@ -64,12 +69,13 @@
 		WHERE login_id = #{loginId}
 	</update>
 
-	<select id="getUserListCnt" resultType="Integer">
-		SELECT COUNT(*) FROM user_info
-		where 1=1 AND use_status = "Y"
-		<if test='userName != null and userName != ""'>
-			and user_name like concat('%', #{userName}, '%')
-		</if> 
+	<select id="getAuthNotUserIdList" resultType="Integer">
+		<![CDATA[
+			SELECT user_id FROM user_info
+			where approv_yn = "N"
+			AND mail_key is not null
+			AND update_date <= DATE_ADD(NOW(), INTERVAL -1 HOUR)
+		]]>
 	</select>
 
   	<!-- 회원 등록(초기 가입 시)  -->
@@ -126,25 +132,6 @@
 		   	 user_id = #{userId}
 	</update>
 
-
-	<update id="deleteUser" parameterType="Map">
-			UPDATE user_info
-			   SET use_status = "N"
-			 WHERE 
-			<choose>
-			<when test="userIdList != null">
-				user_id in 
-				<foreach collection="userIdList" item="item" index="index" separator="," open="(" close=")">
-		            #{item}
-		        </foreach>	
-			</when>
-			<otherwise>
-				user_id = #{userId}
-			</otherwise>
-		</choose>	
-	</update>
-  	
-	
 	<select id="getUserList" resultType="com.softleaf.groupware.dto.UserDTO">
 		SELECT 
 		    u.user_id,
@@ -200,5 +187,40 @@
 			</otherwise>
 		</choose>
 	</select>
+
+	<!-- 회원 삭제 -->
+	<update id="deleteUser" parameterType="Map">
+		UPDATE user_info
+		SET use_status = "N"
+		WHERE
+		<choose>
+			<when test="userIdList != null">
+				user_id in
+				<foreach collection="userIdList" item="item" index="index" separator="," open="(" close=")">
+					#{item}
+				</foreach>
+			</when>
+			<otherwise>
+				user_id = #{userId}
+			</otherwise>
+		</choose>
+	</update>
+
+	<!-- 인증 안한 회원 삭제 -->
+	<delete id="deleteAuthUser" parameterType="Map">
+		DELETE FROM user_info
+		WHERE
+		<choose>
+			<when test="userIdList != null">
+				user_id in
+				<foreach collection="userIdList" item="item" index="index" separator="," open="(" close=")">
+					#{item}
+				</foreach>
+			</when>
+			<otherwise>
+				user_id = #{userId}
+			</otherwise>
+		</choose>
+	</delete>
   
 </mapper>

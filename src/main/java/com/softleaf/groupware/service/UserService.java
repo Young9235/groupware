@@ -1,5 +1,6 @@
 package com.softleaf.groupware.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -15,7 +16,7 @@ public interface UserService {
 	
 	UserDTO getUserInfo(UserDTO user) throws Exception;
 
-	int getUserListCnt(HashMap<String, Object> map) throws Exception;
+	ArrayList<Integer> getAuthNotUserIdList(HashMap<String, Object> map) throws Exception;
 
 	int deleteUser(HashMap<String, Object> map) throws Exception;
 
@@ -27,6 +28,9 @@ public interface UserService {
 
 	UserDTO findByLoginId(String loginId);
 
-	int deleteAuthKay(HashMap<String, Object> map) throws Exception;
+	int confirmAuthKay(HashMap<String, Object> map) throws Exception;
+
+	int deleteAuthUser(HashMap<String, Object> map) throws Exception;
+	int getUserCnt(HashMap<String, Object> map) throws Exception;
 
 }

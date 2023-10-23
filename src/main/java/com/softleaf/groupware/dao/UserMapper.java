@@ -1,5 +1,6 @@
 package com.softleaf.groupware.dao;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -18,7 +19,7 @@ public interface UserMapper {
 	// 삭제
 	int deleteUser(int id);
 	int insertAuth(HashMap<String, Object> map) throws Exception;
-	int getUserListCnt(HashMap<String, Object> map) throws Exception;
+	ArrayList<Integer> getAuthNotUserIdList(HashMap<String, Object> map) throws Exception;
 	UserDTO getUserInfo(UserDTO user) throws Exception;
 	int updateRefreshToken(HashMap<String, Object> map) throws Exception;
 	UserDTO getUserRenew(String refreshToken);
@@ -26,8 +27,8 @@ public interface UserMapper {
 	int deleteUser(HashMap<String, Object> map);
 	void insertAuthMapping(UserDTO user);
 	int createAuthKey(HashMap<String, Object> map) throws Exception;
-
 	int deleteAuthKay(HashMap<String, Object> map) throws Exception;
-
+	int deleteAuthUser(HashMap<String, Object> map) throws Exception;
+	int getUserCnt(HashMap<String, Object> map) throws Exception;
 
 }

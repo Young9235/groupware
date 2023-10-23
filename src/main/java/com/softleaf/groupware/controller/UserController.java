@@ -118,7 +118,7 @@ public class UserController {
 		map.put("rowsPerPage", search.getRowsPerPage());
 		map.put("userName", search.getSchUserName());
 		
-		totalCount = userService.getUserListCnt(map);
+		totalCount = userService.getUserCnt(map);
 		
 		search.setTotalCount(totalCount, map);
 		
