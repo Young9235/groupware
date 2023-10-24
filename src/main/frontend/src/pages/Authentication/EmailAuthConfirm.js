@@ -34,7 +34,7 @@ const EmailAuthConfirm = () => {
       .catch((e) => {
         console.error(e.message);
         setLoading(false);
-        alert('메일 인증 실패');
+        alert('메일 인증 실패, 인증코드가 잘 못 되었습니다.');
         navigate('/login', { replace: true });
       });
   }, [navigate, email, key]);

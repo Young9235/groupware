@@ -182,13 +182,35 @@ public class ApiController {
                     status = HttpStatus.INTERNAL_SERVER_ERROR;
                     response.put("status", "fail");
                 } else {    // 인증 메일 재전송
-                    mailService.sendEmail(userDTO.getLoginId());
+                    mailService.sendEmail(userDTO.getLoginId(), "AUTH");
                     status = HttpStatus.OK;
                     response.put("status", "success");
                     response.put("message", "send mail");
                 }
             }
         }
+        return new ResponseEntity<>(response, status);
+    }
+
+    /**
+     * 비밀번호 초기화(임시비밀번호 발급)
+     * @param userDTO -
+     * @return -
+     */
+    @PostMapping("/emails/create-new-password")
+    public ResponseEntity<HashMap<String, Object>> createNewPassword(@RequestBody UserDTO userDTO) {
+        logger.debug("authEmailConfirm ====> loginId : {}", userDTO.getLoginId());
+        HashMap<String, Object> response = new HashMap<>();
+        HttpStatus status = HttpStatus.UNAUTHORIZED;
+
+        try {
+            mailService.sendEmail(userDTO.getLoginId(), "NEW_PASS");
+            status = HttpStatus.OK;
+            response.put("status", "success");
+        } catch (Exception e) {
+            response.put("status", "fail");
+        }
+
         return new ResponseEntity<>(response, status);
     }
 //}

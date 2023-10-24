@@ -64,3 +64,4 @@ export const UPDATE_AUTH_INFO = '/admin/auth/update';
 export const DELETE_AUTH_LIST = '/admin/auth/delete';
 
 export const SEND_AUTH_MAIL_CONFIRM = '/api/emails/auth-email-confirm';
+export const CREATE_NEW_PASSWORD = '/api/emails/create-new-password';

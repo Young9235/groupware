@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Row,
   Col,
@@ -13,8 +13,6 @@ import {
   Form,
 } from 'reactstrap';
 
-//redux
-import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import withRouter from 'src/components/Common/withRouter';
 
@@ -22,38 +20,43 @@ import withRouter from 'src/components/Common/withRouter';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 
-// action
-import { userForgetPassword } from '../../store/actions';
-
 // import images
-import profile from '../../assets/images/profile-img.png';
-import logo from '../../assets/images/logo.svg';
+import profile from 'src/assets/images/profile-img.png';
+import logo from 'src/assets/images/logo.svg';
+import { createNewPassword } from 'src/axios-apis/backend';
 
 const ForgetPasswordPage = (props) => {
   //meta title
   document.title = 'Forget Password | Skote - React Admin & Dashboard Template';
 
-  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
 
   const validation = useFormik({
     // enableReinitialize : use this flag when initial values needs to be changed
     enableReinitialize: true,
 
     initialValues: {
-      email: '',
+      login_id: '',
     },
     validationSchema: Yup.object({
-      email: Yup.string().required('Please Enter Your Email'),
+      login_id: Yup.string().required('이메일을 입력 해 주세요.'),
     }),
     onSubmit: (values) => {
-      dispatch(userForgetPassword(values, props.history));
+      setLoading(true);
+      createNewPassword(values)
+        .then((response) => {
+          setLoading(false);
+          console.log(response);
+          setMessage('success');
+        })
+        .catch((e) => {
+          setLoading(false);
+          console.error(e.message);
+          setMessage('fail');
+        });
     },
   });
-
-  const { forgetError, forgetSuccessMsg } = useSelector((state) => ({
-    forgetError: state.ForgetPassword.forgetError,
-    forgetSuccessMsg: state.ForgetPassword.forgetSuccessMsg,
-  }));
 
   return (
     <React.Fragment>
@@ -82,26 +85,23 @@ const ForgetPasswordPage = (props) => {
                 </div>
                 <CardBody className="pt-0">
                   <div>
-                    <Link to="/">
-                      <div className="avatar-md profile-user-wid mb-4">
-                        <span className="avatar-title rounded-circle bg-light">
-                          <img src={logo} alt="" className="rounded-circle" height="34" />
-                        </span>
-                      </div>
-                    </Link>
+                    <div className="avatar-md profile-user-wid mb-4">
+                      <span className="avatar-title rounded-circle bg-light">
+                        <img src={logo} alt="" className="rounded-circle" height="34" />
+                      </span>
+                    </div>
                   </div>
                   <div className="p-2">
-                    {forgetError && forgetError ? (
-                      <Alert color="danger" style={{ marginTop: '13px' }}>
-                        {forgetError}
+                    {!loading && message === 'fail' ? (
+                      <Alert color="danger">
+                        가입이 안 된 메일이거나, 메일주소가 잘 못 되었습니다.
                       </Alert>
                     ) : null}
-                    {forgetSuccessMsg ? (
-                      <Alert color="success" style={{ marginTop: '13px' }}>
-                        {forgetSuccessMsg}
+                    {!loading && message === 'success' ? (
+                      <Alert color="success">
+                        임시 비밀번호가 발송되었습니다. 메일을 확인해주세요.
                       </Alert>
                     ) : null}
-
                     <Form
                       className="form-horizontal"
                       onSubmit={(e) => {
@@ -113,25 +113,34 @@ const ForgetPasswordPage = (props) => {
                       <div className="mb-3">
                         <Label className="form-label">Email</Label>
                         <Input
-                          name="email"
+                          name="login_id"
                           className="form-control"
-                          placeholder="Enter email"
+                          placeholder="Enter login_id"
                           type="email"
                           onChange={validation.handleChange}
                           onBlur={validation.handleBlur}
-                          value={validation.values.email || ''}
+                          value={validation.values.login_id || ''}
+                          disabled={loading}
                           invalid={
-                            validation.touched.email && validation.errors.email ? true : false
+                            validation.touched.login_id && validation.errors.login_id ? true : false
                           }
                         />
-                        {validation.touched.email && validation.errors.email ? (
-                          <FormFeedback type="invalid">{validation.errors.email}</FormFeedback>
+                        {validation.touched.login_id && validation.errors.login_id ? (
+                          <FormFeedback type="invalid">{validation.errors.login_id}</FormFeedback>
                         ) : null}
                       </div>
                       <Row className="mb-3">
                         <Col className="text-end">
-                          <button className="btn btn-primary w-md " type="submit">
-                            Reset
+                          <button
+                            className="btn btn-primary w-md "
+                            type="submit"
+                            disabled={loading}
+                          >
+                            {loading ? (
+                              <i className="bx bx-loader bx-spin font-size-16 align-middle me-2"></i>
+                            ) : (
+                              'Reset'
+                            )}
                           </button>
                         </Col>
                       </Row>

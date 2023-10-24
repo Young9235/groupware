@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService {
 				this.updateUser(userDto);
 			}
 			// 이쪽에서 메일(인증 코드)를 보내자! -> 저장은 메일 인증을 한 후 저장하는걸로?, 이쪽에서 key값 업데이트 처리
-			mailService.sendEmail(userDto.getLoginId());
+			mailService.sendEmail(userDto.getLoginId(), "AUTH");
 
 			resultMap.put("status", "success");
 			resultMap.put("loginId", userDto.getLoginId());

@@ -2,6 +2,7 @@ package com.softleaf.groupware.service;
 
 import com.softleaf.groupware.common.Constants;
 import com.softleaf.groupware.dao.UserMapper;
+import com.softleaf.groupware.dto.UserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -30,9 +31,14 @@ public class MailService {
         this.userMapper = userMapper;
     }
 
-    public void sendEmail(String toEmail) {
+    public void sendEmail(String toEmail, String type) {
         try {
-            MimeMessage emailForm = createEmailForm(toEmail);
+            MimeMessage emailForm = null;
+            if("AUTH".equals(type)) {
+                emailForm = createEmailForm(toEmail);
+            } else {
+                emailForm = createNewPassword(toEmail);
+            }
             emailSender.send(emailForm);
         } catch (Exception e) {
             throw new RuntimeException("MailService.sendEmail exception occur : "+ e.getMessage());
@@ -50,9 +56,9 @@ public class MailService {
                 "title: {}, authCode: {}", toEmail, title, key);
 
         HashMap<String, Object> map = new HashMap<>();
-        map.put("mailKey", key);
         map.put("loginId", toEmail);
 
+        map.put("mailKey", key);
         int sucFlg = userMapper.createAuthKey(map); // 인증키를 업데이트 한다.
         if(sucFlg <= 0) {
             throw new RuntimeException("======= createAuthKey Error =========");
@@ -67,6 +73,49 @@ public class MailService {
             body += "<h3><a href='" + Constants.FRONT_SERVER_ADDR + "/auth-email-confirm/" + toEmail +
                     "/" + key + "' target='_blenk'>이메일 인증 확인</a></h3>";
             body += "<h3>" + "감사합니다." + "</h3>";
+            message.setText(body,"UTF-8", "html");
+
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
+
+        return message;
+    }
+    
+    // 신규 임시 패스워드 발급
+    private MimeMessage createNewPassword(String toEmail) throws Exception {
+        MimeMessage message = emailSender.createMimeMessage();
+
+        String title = "[소프트리프] 임시 비밀번호 확인";
+        String key = this.createCode();
+
+        logger.debug("Logger toEmail: {}, " +
+                "title: {}, authCode: {}", toEmail, title, key);
+
+        UserDTO param = new UserDTO();
+        param.setLoginId(toEmail);
+
+        UserDTO user = userMapper.getUserInfo(param);
+        if(user != null) {
+            param = new UserDTO();
+            param.setPassword(key);
+            param.setUserId(user.getUserId());
+
+            int sucFlg = userMapper.updateUser(param);
+            if(sucFlg <= 0) {
+                throw new RuntimeException("======= createNewPassword Error =========");
+            }
+        } else {
+            throw new RuntimeException("존재하지 않는 이메일 주소입니다.");
+        }
+
+        try {
+            message.setRecipients(MimeMessage.RecipientType.TO, toEmail);
+            message.setSubject(title);
+            String body = "";
+            body += "<h3>"+ toEmail + "님의 비밀번호가 초기화 되었습니다.</h3>";
+            body += "<h3>신규 비밀번호는 ["+key+"] 입니다.</h3>";
+            body += "해당 비밀번호는 수정이 필요합니다. <br/>감사합니다.";
             message.setText(body,"UTF-8", "html");
 
         } catch (MessagingException e) {
