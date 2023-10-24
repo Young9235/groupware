@@ -86,7 +86,7 @@ public class MailService {
     private MimeMessage createNewPassword(String toEmail) throws Exception {
         MimeMessage message = emailSender.createMimeMessage();
 
-        String title = "[소프트리프] 임시 비밀번호 확인";
+        String title = "[소프트리프] 임시 비밀번호 발급";
         String key = this.createCode();
 
         logger.debug("Logger toEmail: {}, " +
@@ -113,9 +113,9 @@ public class MailService {
             message.setRecipients(MimeMessage.RecipientType.TO, toEmail);
             message.setSubject(title);
             String body = "";
-            body += "<h3>"+ toEmail + "님의 비밀번호가 초기화 되었습니다.</h3>";
-            body += "<h3>신규 비밀번호는 ["+key+"] 입니다.</h3>";
-            body += "해당 비밀번호는 수정이 필요합니다. <br/>감사합니다.";
+            body += "<h3>"+ toEmail + "님의 임시 비밀번호가 초기화 되었습니다.</h3>";
+            body += "<h3>임시 비밀번호는 ["+key+"] 입니다.</h3>";
+            body += "해당 비밀번호는 임시 비밀번호이며, 수정이 필요합니다. <br/>감사합니다.";
             message.setText(body,"UTF-8", "html");
 
         } catch (MessagingException e) {
